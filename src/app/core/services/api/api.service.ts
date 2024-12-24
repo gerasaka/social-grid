@@ -40,7 +40,7 @@ export class ApiService {
   getAllPhotos() {
     return this.http
       .get<IPhoto[]>(this.API_BASE_URL + '/photos')
-      .pipe(tap((res) => this.storageService.photos$.set(res)));
+      .pipe(tap((res) => (this.storageService.photos = res)));
   }
 
   getPhotoDetails(id: number) {

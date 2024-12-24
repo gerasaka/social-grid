@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { IAlbum, IPhoto, IPost } from '../api/response.dto';
 
 @Injectable({
@@ -7,5 +7,5 @@ import { IAlbum, IPhoto, IPost } from '../api/response.dto';
 export class StorageService {
   posts: IPost[] = [];
   albums: IAlbum[] = [];
-  photos$ = signal<IPhoto[]>([]);
+  photos: IPhoto[] = [];
 }
