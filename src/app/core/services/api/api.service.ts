@@ -16,7 +16,7 @@ export class ApiService {
   getAllPosts() {
     return this.http
       .get<IPost[]>(this.API_BASE_URL + '/posts')
-      .pipe(tap((res) => this.storageService.posts$.set(res)));
+      .pipe(tap((res) => (this.storageService.posts = res)));
   }
 
   getPostDetails(id: number) {

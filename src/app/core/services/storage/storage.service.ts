@@ -5,7 +5,7 @@ import { IAlbum, IPhoto, IPost } from '../api/response.dto';
   providedIn: 'root',
 })
 export class StorageService {
-  posts$ = signal<IPost[]>([]);
+  posts: IPost[] = [];
   albums$ = signal<IAlbum[]>([]);
   photos$ = signal<IPhoto[]>([]);
 }
