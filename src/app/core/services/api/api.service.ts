@@ -30,7 +30,7 @@ export class ApiService {
   getAllAlbums() {
     return this.http
       .get<IAlbum[]>(this.API_BASE_URL + '/albums')
-      .pipe(tap((res) => this.storageService.albums$.set(res)));
+      .pipe(tap((res) => (this.storageService.albums = res)));
   }
 
   getAlbumDetails(id: number) {
