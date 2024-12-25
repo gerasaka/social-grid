@@ -1,64 +1,81 @@
-<h1 class="mb-5">See all post</h1>
+<h1>See all post</h1>
+<p class="mb-4">Find the best posts here</p>
 
-<form
-  class="d-flex align-items-end justify-content-between gap-5 mb-4 w-full"
-  (submit)="onSubmit($event)"
->
-  <div class="position-relative">
-    <input
-      type="text"
-      class="form-control"
-      id="search"
-      placeholder="Search by title"
-      [formControl]="searchQuery"
-    />
-    <icon-search class="position-absolute top-50 end-0 translate-middle-y me-3" />
+@if (pageState === "LOADING") {
+  <div class="placeholder-glow d-flex justify-content-end mb-4">
+    <span class="placeholder col-5 rounded" style="height: 2.375rem"></span>
+    <span class="placeholder col-4 rounded" style="height: 2.375rem"></span>
   </div>
 
-  <div class="d-flex align-items-center gap-2">
-    <label for="sort" class=""><icon-sort size="24" /> </label>
-    <select class="form-select" aria-label="Sort by" id="sort" [formControl]="sortQuery">
-      <option selected value="DEFAULT">Default</option>
-      <option value="ASC">Ascending</option>
-      <option value="DESC">Descending</option>
-    </select>
+  <div class="post-container placeholder-glow">
+    <span class="placeholder rounded-3 loading-card"></span>
+    <span class="placeholder rounded-3 loading-card"></span>
+    <span class="placeholder rounded-3 loading-card"></span>
+    <span class="placeholder rounded-3 loading-card"></span>
   </div>
-</form>
+} @else if (pageState === "COMPLETE") {
+  <form
+    class="d-flex justify-content-between justify-content-md-start gap-3 mb-4 w-full"
+    (submit)="onSubmit($event)"
+  >
+    <div class="position-relative">
+      <input
+        type="text"
+        class="form-control"
+        id="search"
+        placeholder="Search by title"
+        [formControl]="searchQuery"
+      />
+      <icon-search class="position-absolute top-50 end-0 translate-middle-y me-3" />
+    </div>
 
-<div class="post-container">
-  @for (post of posts(); track $index) {
-    <div class="card h-100">
-      <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <span class="d-flex gap-2 align-items-center">
-            <icon-circle-user size="20" />
-            Username
-          </span>
-          <span class="d-flex gap-2 align-items-center"> <icon-favourite size="20" /> 123 </span>
+    <div class="position-relative">
+      <select class="form-select" aria-label="Sort by" id="sort" [formControl]="sortQuery">
+        <option selected value="DEFAULT">Default</option>
+        <option value="ASC">Ascending</option>
+        <option value="DESC">Descending</option>
+      </select>
+      <icon-sort class="position-absolute top-50 end-0 translate-middle-y me-3" />
+    </div>
+  </form>
+
+  <div class="post-container">
+    @for (post of posts(); track $index) {
+      <div class="card h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="d-flex gap-2 align-items-center">
+              <icon-circle-user size="20" />
+              Username
+            </span>
+            <span class="d-flex gap-2 align-items-center"> <icon-favourite size="20" /> 123 </span>
+          </div>
+
+          <a
+            [routerLink]="['/routePath']"
+            routerLinkActive="router-link-active"
+            class="d-flex align-items-center mb-3 text-decoration-none"
+            style="height: 3rem"
+          >
+            <h5 class="post-title text-secondary">{{ post.title }}</h5>
+          </a>
+
+          <p class="post-body mb-0">{{ post.body }}</p>
         </div>
-
-        <a
-          [routerLink]="['/routePath']"
-          routerLinkActive="router-link-active"
-          class="d-flex align-items-center mb-3 text-decoration-none"
-          style="height: 3rem"
-        >
-          <h5 class="post-title text-secondary">{{ post.title }}</h5>
-        </a>
-
-        <p class="post-body mb-0">{{ post.body }}</p>
       </div>
+    }
+  </div>
+
+  @if (totalPost) {
+    <div class="d-flex justify-content-center mt-5">
+      <ngb-pagination
+        [(page)]="currPage"
+        [pageSize]="pageSize"
+        [collectionSize]="totalPost"
+        [maxSize]="4"
+      />
     </div>
   }
-</div>
-
-@if (totalPost) {
-  <div class="d-flex justify-content-center mt-5">
-    <ngb-pagination
-      [(page)]="currPage"
-      [pageSize]="pageSize"
-      [collectionSize]="totalPost"
-      [maxSize]="4"
-    />
-  </div>
+} @else {
+  <!-- TODO: add error illustration -->
 }
