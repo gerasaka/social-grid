@@ -13,43 +13,43 @@ export class ApiService {
 
   private API_BASE_URL = 'https://jsonplaceholder.typicode.com';
 
-  getAllPosts() {
+  getAllPosts$() {
     return this.http
       .get<IPost[]>(this.API_BASE_URL + '/posts')
       .pipe(tap((res) => (this.storageService.posts = res)));
   }
 
-  getPostDetails(id: number) {
+  getPostDetails$(id: number) {
     return this.http.get<IPost>(this.API_BASE_URL + '/posts/' + id);
   }
 
-  getAllUsers() {
+  loadUsers() {
     this.http.get<IUser[]>(this.API_BASE_URL + '/users').subscribe({
-      next: (res) => (this.storageService.users = res),
+      next: (res) => this.storageService.users.set(res),
     });
   }
 
-  getUserDetails(id: number) {
+  getUserDetails$(id: number) {
     return this.http.get<IUser>(this.API_BASE_URL + '/users/' + id);
   }
 
-  getAllAlbums() {
+  getAllAlbums$() {
     return this.http
       .get<IAlbum[]>(this.API_BASE_URL + '/albums')
       .pipe(tap((res) => (this.storageService.albums = res)));
   }
 
-  getAlbumDetails(id: number) {
+  getAlbumDetails$(id: number) {
     return this.http.get<IAlbum>(this.API_BASE_URL + '/albums/' + id);
   }
 
-  getAllPhotos() {
+  getAllPhotos$() {
     return this.http
       .get<IPhoto[]>(this.API_BASE_URL + '/photos')
       .pipe(tap((res) => (this.storageService.photos = res)));
   }
 
-  getPhotoDetails(id: number) {
+  getPhotoDetails$(id: number) {
     return this.http.get<IPhoto>(this.API_BASE_URL + '/photos/' + id);
   }
 }
