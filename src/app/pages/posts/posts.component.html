@@ -1,44 +1,59 @@
-<h1>See all post</h1>
+<h1 class="mb-5">See all post</h1>
 
-<div class="d-flex gap-3 align-items-end mb-4">
-  <div>
-    <label for="search" class="form-label">Search</label>
+<form
+  class="d-flex align-items-end justify-content-between gap-5 mb-4 w-full"
+  (submit)="onSubmit($event)"
+>
+  <div class="position-relative">
     <input
       type="text"
       class="form-control"
       id="search"
-      placeholder="Enter post title"
-      [formControl]="query"
+      placeholder="Search by title"
+      [formControl]="searchQuery"
     />
+    <icon-search class="position-absolute top-50 end-0 translate-middle-y me-3" />
   </div>
 
-  <div>
-    <label for="sort" class="form-label">Sort</label>
-    <select class="form-select" aria-label="Sort by" id="sort" [formControl]="sort">
+  <div class="d-flex align-items-center gap-2">
+    <label for="sort" class=""><icon-sort size="24" /> </label>
+    <select class="form-select" aria-label="Sort by" id="sort" [formControl]="sortQuery">
       <option selected value="DEFAULT">Default</option>
       <option value="ASC">Ascending</option>
       <option value="DESC">Descending</option>
     </select>
   </div>
-</div>
+</form>
 
-<div class="container-fluid">
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-    @for (post of posts(); track $index) {
-      <div class="col">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5>{{ post.title }}</h5>
-            <p>{{ post.body }}</p>
-          </div>
+<div class="post-container">
+  @for (post of posts(); track $index) {
+    <div class="card h-100">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <span class="d-flex gap-2 align-items-center">
+            <icon-circle-user size="20" />
+            Username
+          </span>
+          <span class="d-flex gap-2 align-items-center"> <icon-favourite size="20" /> 123 </span>
         </div>
+
+        <a
+          [routerLink]="['/routePath']"
+          routerLinkActive="router-link-active"
+          class="d-flex align-items-center mb-3 text-decoration-none"
+          style="height: 3rem"
+        >
+          <h5 class="post-title text-secondary">{{ post.title }}</h5>
+        </a>
+
+        <p class="post-body mb-0">{{ post.body }}</p>
       </div>
-    }
-  </div>
+    </div>
+  }
 </div>
 
 @if (totalPost) {
-  <div class="d-flex justify-content-center mt-4">
+  <div class="d-flex justify-content-center mt-5">
     <ngb-pagination
       [(page)]="currPage"
       [pageSize]="pageSize"
