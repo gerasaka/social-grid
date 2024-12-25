@@ -43,17 +43,26 @@
     @for (post of posts(); track $index) {
       <div class="card h-100">
         <div class="card-body">
-          <div class="d-flex justify-content-between align-items-center mb-3">
+          <div
+            class="d-flex justify-content-between align-items-center mb-3"
+            style="font-size: 0.875rem"
+          >
+            @let postInfo = getPostInfo(post.userId);
+
             <span class="d-flex gap-2 align-items-center">
-              <icon-circle-user size="20" />
-              Username
+              <icon-circle-user size="14" />
+              <a [routerLink]="['/routePath']" class="text-decoration-none">
+                {{ postInfo.author }}
+              </a>
             </span>
-            <span class="d-flex gap-2 align-items-center"> <icon-favourite size="20" /> 123 </span>
+            <span class="d-flex gap-2 align-items-center">
+              <icon-favourite size="14" />
+              {{ postInfo.likes }}
+            </span>
           </div>
 
           <a
             [routerLink]="['/routePath']"
-            routerLinkActive="router-link-active"
             class="d-flex align-items-center mb-3 text-decoration-none"
             style="height: 3rem"
           >

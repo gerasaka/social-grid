@@ -89,12 +89,21 @@ export class PostsPages implements OnInit {
         error: () => (this.pageState = 'ERROR'),
       });
     } else setContent(this.storageService.posts);
+
+    if (this.storageService.users.length === 0) {
+      this.apiService.getAllUsers();
+    }
   }
 
   initListener() {
     this.sortQuery.valueChanges.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe({
       next: () => this.applyFilters(),
     });
+  }
+
+  getPostInfo(id: number) {
+    const { name } = this.storageService.users[id - 1];
+    return { author: name, likes: Math.floor(Math.random() * 200) + 1 };
   }
 
   onSubmit(e: Event) {

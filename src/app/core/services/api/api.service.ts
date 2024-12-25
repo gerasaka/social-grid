@@ -23,6 +23,12 @@ export class ApiService {
     return this.http.get<IPost>(this.API_BASE_URL + '/posts/' + id);
   }
 
+  getAllUsers() {
+    this.http.get<IUser[]>(this.API_BASE_URL + '/users').subscribe({
+      next: (res) => (this.storageService.users = res),
+    });
+  }
+
   getUserDetails(id: number) {
     return this.http.get<IUser>(this.API_BASE_URL + '/users/' + id);
   }
