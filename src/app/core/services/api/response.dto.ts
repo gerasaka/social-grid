@@ -10,9 +10,15 @@ export interface IUser {
   name: string;
   username: string;
   email: string;
-  address: { city: string };
+  address: IUserAddress;
   phone: string;
   website: string;
+}
+
+interface IUserAddress {
+  street: string;
+  city: string;
+  zipcode: string;
 }
 
 export interface IAlbum {
