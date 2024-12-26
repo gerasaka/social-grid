@@ -1,48 +1,69 @@
-<h1>See all album</h1>
+<h1>See all Albums</h1>
+<p class="mb-4">Where the memories saved</p>
 
-<div class="d-flex gap-3 align-items-end mb-4">
-  <div>
-    <label for="search" class="form-label">Search</label>
-    <input
-      type="text"
-      class="form-control"
-      id="search"
-      placeholder="Enter album title"
-      [formControl]="query"
-    />
+@if (pageState === "LOADING") {
+  <div class="placeholder-glow d-flex justify-content-between justify-content-md-start gap-3 mb-4">
+    <span class="placeholder rounded" style="height: 2.375rem; width: 10rem"></span>
+    <span class="placeholder rounded" style="height: 2.375rem; width: 8rem"></span>
   </div>
 
-  <div>
-    <label for="sort" class="form-label">Sort</label>
-    <select class="form-select" aria-label="Sort by" id="sort" [formControl]="sort">
-      <option selected value="DEFAULT">Default</option>
-      <option value="ASC">Ascending</option>
-      <option value="DESC">Descending</option>
-    </select>
+  <div class="album-container placeholder-glow">
+    <span class="placeholder rounded-3 loading-card"></span>
+    <span class="placeholder rounded-3 loading-card"></span>
+    <span class="placeholder rounded-3 loading-card"></span>
+    <span class="placeholder rounded-3 loading-card"></span>
   </div>
-</div>
+} @else if (pageState === "COMPLETE") {
+  <form
+    class="d-flex justify-content-between justify-content-md-start gap-3 mb-4 w-full"
+    (submit)="onSubmit($event)"
+  >
+    <div class="position-relative">
+      <input
+        type="text"
+        class="form-control"
+        id="search"
+        placeholder="Search by title"
+        [formControl]="searchQuery"
+      />
+      <icon-search class="position-absolute top-50 end-0 translate-middle-y me-3" />
+    </div>
 
-<div class="container-fluid">
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    <div class="position-relative">
+      <select class="form-select" aria-label="Sort by" id="sort" [formControl]="sortQuery">
+        <option selected value="DEFAULT">Default</option>
+        <option value="ASC">Ascending</option>
+        <option value="DESC">Descending</option>
+      </select>
+      <icon-sort class="position-absolute top-50 end-0 translate-middle-y me-3" />
+    </div>
+  </form>
+
+  <div class="album-container">
     @for (album of albums(); track $index) {
-      <div class="col">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5>{{ album.title }}</h5>
+      <div class="card h-100 album-card">
+        <div class="card-body text-secondary d-flex flex-column gap-3 align-items-center">
+          <div class="album-preview">
+            <img [src]="'https://picsum.photos/id/' + album.id + '/150/150'" alt="" />
+            <img [src]="'https://picsum.photos/id/' + (album.id + 10) + '/150/150'" alt="" />
           </div>
+
+          <a [routerLink]="['/albums/' + album.id]" class="h6 text-decoration-none album-title">
+            {{ album.title }}
+          </a>
         </div>
       </div>
     }
   </div>
-</div>
 
-@if (totalAlbum) {
-  <div class="d-flex justify-content-center mt-4">
-    <ngb-pagination
-      [(page)]="currPage"
-      [pageSize]="pageSize"
-      [collectionSize]="totalAlbum"
-      [maxSize]="4"
-    />
-  </div>
+  @if (totalAlbum) {
+    <div class="d-flex justify-content-center mt-5">
+      <ngb-pagination
+        [(page)]="currPage"
+        [pageSize]="pageSize"
+        [collectionSize]="totalAlbum"
+        [maxSize]="4"
+      />
+    </div>
+  }
 }
