@@ -4,15 +4,26 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NgbPagination } from '@ng-bootstrap/ng-bootstrap';
+import { ListLoadingComponent } from '../../components/list-loading.component';
 import { ApiService } from '../../core/services/api/api.service';
 import { IAlbum } from '../../core/services/api/response.dto';
 import { StorageService } from '../../core/services/storage/storage.service';
+import { CircleUserIcon } from '../../shared/icons/circle-user.component';
 import { SearchIcon } from '../../shared/icons/search.component';
 import { SortIcon } from '../../shared/icons/sort.component';
 
 @Component({
   selector: 'albums',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, SearchIcon, SortIcon, NgbPagination],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterLink,
+    ListLoadingComponent,
+    SearchIcon,
+    SortIcon,
+    CircleUserIcon,
+    NgbPagination,
+  ],
   templateUrl: './albums.component.html',
   styleUrl: './albums.component.scss',
 })
@@ -24,7 +35,7 @@ export class AlbumsPage implements OnInit {
 
   readonly #destroyRef = inject(DestroyRef);
 
-  pageState: 'LOADING' | 'COMPLETE' | 'ERROR' = 'LOADING';
+  loading = true;
   _currPage = 1;
   pageSize = 10;
   totalAlbum = 0;
@@ -60,30 +71,25 @@ export class AlbumsPage implements OnInit {
   }
 
   loadAlbums(query?: string, sort?: string) {
-    const setContent = (albums: IAlbum[]) => {
-      this.filteredAlbums.set([...albums]);
+    this.filteredAlbums.set([...this.storageService.albums]);
 
-      if (query) this.searchAlbums(query);
-      if (sort) this.sortAlbums(sort as 'ASC' | 'DESC' | 'DEFAULT');
+    if (query) this.searchAlbums(query);
+    if (sort) this.sortAlbums(sort as 'ASC' | 'DESC' | 'DEFAULT');
 
-      this.totalAlbum = this.filteredAlbums().length;
-      this.pageState = 'COMPLETE';
-
-      this.initListener();
-    };
-
-    if (this.storageService.albums.length === 0) {
-      this.apiService.getAllAlbums$().subscribe({
-        next: setContent,
-        error: () => (this.pageState = 'ERROR'),
-      });
-    } else setContent(this.storageService.albums);
+    this.totalAlbum = this.filteredAlbums().length;
+    this.loading = false;
+    this.initListener();
   }
 
   initListener() {
     this.sortQuery.valueChanges.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe({
       next: () => this.applyFilters(),
     });
+  }
+
+  getPostAuthor(id: number) {
+    const { name } = this.storageService.users()[id - 1];
+    return name;
   }
 
   onSubmit(e: Event) {

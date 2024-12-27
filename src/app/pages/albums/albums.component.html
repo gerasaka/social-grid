@@ -1,19 +1,9 @@
-<h1>See all Albums</h1>
-<p class="mb-4">Where the memories saved</p>
+@if (loading) {
+  <list-loading />
+} @else {
+  <h1>See all Albums</h1>
+  <p class="mb-4">Where the memories saved</p>
 
-@if (pageState === "LOADING") {
-  <div class="placeholder-glow d-flex justify-content-between justify-content-md-start gap-3 mb-4">
-    <span class="placeholder rounded" style="height: 2.375rem; width: 10rem"></span>
-    <span class="placeholder rounded" style="height: 2.375rem; width: 8rem"></span>
-  </div>
-
-  <div class="album-container placeholder-glow">
-    <span class="placeholder rounded-3 loading-card"></span>
-    <span class="placeholder rounded-3 loading-card"></span>
-    <span class="placeholder rounded-3 loading-card"></span>
-    <span class="placeholder rounded-3 loading-card"></span>
-  </div>
-} @else if (pageState === "COMPLETE") {
   <form
     class="d-flex justify-content-between justify-content-md-start gap-3 mb-4 w-full"
     (submit)="onSubmit($event)"
@@ -42,10 +32,34 @@
   <div class="album-container">
     @for (album of albums(); track $index) {
       <div class="card h-100 album-card">
+        <div
+          class="card-header d-flex justify-content-between align-items-center"
+          style="font-size: 0.875rem"
+        >
+          @let author = getPostAuthor(album.userId);
+
+          <span class="d-flex gap-2 align-items-center">
+            <icon-circle-user />
+            <a [routerLink]="['/users/' + album.userId]" class="text-decoration-none">
+              {{ author }}
+            </a>
+          </span>
+        </div>
+
         <div class="card-body text-secondary d-flex flex-column gap-3 align-items-center">
           <div class="album-preview">
-            <img [src]="'https://picsum.photos/id/' + album.id + '/150/150'" alt="" />
-            <img [src]="'https://picsum.photos/id/' + (album.id + 10) + '/150/150'" alt="" />
+            <img
+              [src]="'https://picsum.photos/id/' + album.id + '/150/150'"
+              alt=""
+              role="presentation"
+              loading="lazy"
+            />
+            <img
+              [src]="'https://picsum.photos/id/' + (album.id + 10) + '/150/150'"
+              alt=""
+              role="presentation"
+              loading="lazy"
+            />
           </div>
 
           <a [routerLink]="['/albums/' + album.id]" class="h6 text-decoration-none album-title">
