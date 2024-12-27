@@ -1,6 +1,6 @@
 <button class="back" (click)="back()"><icon-arrow-left /> Back</button>
 
-@if (pageState === "LOADING") {
+@if (loading) {
   <div class="placeholder-glow d-flex flex-column align-items-center">
     <div class="placeholder rounded-circle" style="height: 6rem; width: 6rem"></div>
     <span class="placeholder rounded col-5 mt-3" style="height: 2rem"></span>
@@ -38,7 +38,7 @@
     <span class="placeholder rounded" style="height: 168px"></span>
     <span class="placeholder rounded" style="height: 168px"></span>
   </div>
-} @else if (pageState === "COMPLETE") {
+} @else {
   <div class="my-4 d-flex flex-column align-items-center">
     <div>
       <img
