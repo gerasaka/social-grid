@@ -1,9 +1,8 @@
+<button class="back" (click)="back()"><icon-arrow-left /> Back</button>
+
 @if (loading) {
   <list-loading />
 } @else {
-  <h1>See all Photos</h1>
-  <p class="mb-4">The best photos around the world are here</p>
-
   <form
     class="d-flex justify-content-between justify-content-md-start gap-3 mb-4 w-full"
     (submit)="onSubmit($event)"

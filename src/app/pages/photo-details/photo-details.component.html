@@ -1,22 +1,39 @@
 <button class="back" (click)="back()"><icon-arrow-left /> Back</button>
 
-<div class="text-center">
-  <img
-    [src]="'https://picsum.photos/id/' + photo.id + '/200/300'"
-    [alt]="photo.title"
-    class="col-12 col-md-6 m-auto"
-    style="aspect-ratio: 1"
-  />
+@if (loading) {
+  <div class="placeholder-glow">
+    <span class="placeholder d-block m-auto col-12 col-md-6" style="aspect-ratio: 1"></span>
+    <span
+      class="placeholder rounded d-block m-auto col-6 mt-4 mb-5"
+      style="height: 1.875rem"
+    ></span>
 
-  <h3 class="mt-4 mb-5 text-secondary">{{ photo.title }}</h3>
-
-  <hr />
-  <div class="text-start">
-    <p>Related album</p>
-    <div class="d-flex gap-2 align-items-center">
-      <icon-album size="20" />
-      <a [routerLink]="['/albums/' + album.id]" class="text-decoration-none">{{ album.title }}</a>
+    <hr />
+    <div>
+      <p class="mb-2">Featured in</p>
+      <span class="placeholder rounded col-5" style="height: 1.5rem"></span>
     </div>
+    <hr />
   </div>
-  <hr />
-</div>
+} @else {
+  <div class="text-center">
+    <img
+      [src]="'https://picsum.photos/id/' + photo.id + '/300/300'"
+      [alt]="photo.title"
+      class="col-12 col-md-6 m-auto"
+      style="aspect-ratio: 1"
+    />
+
+    <h3 class="mt-4 mb-5 text-secondary">{{ photo.title }}</h3>
+
+    <hr />
+    <div class="text-start">
+      <p class="mb-2">Featured in</p>
+      <div class="d-flex gap-2 align-items-center">
+        <icon-album size="20" />
+        <a [routerLink]="['/albums/' + album.id]" class="text-decoration-none">{{ album.title }}</a>
+      </div>
+    </div>
+    <hr />
+  </div>
+}
