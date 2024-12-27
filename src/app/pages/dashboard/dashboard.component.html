@@ -44,18 +44,7 @@
 
     <div class="photo-container">
       @for (photo of newPhotos; track $index) {
-        <div class="card h-100">
-          <div class="card-body text-secondary d-flex flex-column gap-3 align-items-center">
-            <img
-              [src]="'https://picsum.photos/id/' + photo.id + '/300/300'"
-              [alt]="photo.title"
-              loading="lazy"
-            />
-            <a [routerLink]="['/photos/' + photo.id]" class="h6 text-decoration-none content-title">
-              {{ photo.title }}
-            </a>
-          </div>
-        </div>
+        <photo-card [photo]="photo" />
       }
     </div>
   </div>

@@ -1,9 +1,3 @@
-.photo-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
-}
-
 .content-title {
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -12,4 +6,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
   margin-bottom: 0;
+}
+
+img {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 0.5rem;
 }

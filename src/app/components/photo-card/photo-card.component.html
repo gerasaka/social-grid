@@ -1,0 +1,15 @@
+<div class="card h-100">
+  <div class="card-body text-secondary d-flex flex-column gap-3 align-items-center">
+    <img
+      [src]="'https://picsum.photos/id/' + photo().id + '/300/300'"
+      [alt]="photo().title"
+      loading="lazy"
+    />
+    <a
+      [routerLink]="['/photos/' + photo().id]"
+      class="h6 text-decoration-none content-title text-center"
+    >
+      {{ photo().title }}
+    </a>
+  </div>
+</div>

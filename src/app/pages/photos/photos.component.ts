@@ -5,6 +5,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NgbPagination } from '@ng-bootstrap/ng-bootstrap';
 import { ListLoadingComponent } from '../../components/list-loading.component';
+import { PhotoCardComponent } from '../../components/photo-card/photo-card.component';
 import { ApiService } from '../../core/services/api/api.service';
 import { IPhoto } from '../../core/services/api/response.dto';
 import { StorageService } from '../../core/services/storage/storage.service';
@@ -18,6 +19,7 @@ import { SortIcon } from '../../shared/icons/sort.component';
     ReactiveFormsModule,
     RouterLink,
     ListLoadingComponent,
+    PhotoCardComponent,
     SearchIcon,
     SortIcon,
     NgbPagination,
