@@ -4,11 +4,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NgbPagination } from '@ng-bootstrap/ng-bootstrap';
-import { ApiService } from '../../core/services/api/api.service';
+import { ListLoadingComponent } from '../../components/list-loading.component';
 import { IPost } from '../../core/services/api/response.dto';
 import { StorageService } from '../../core/services/storage/storage.service';
+import { BookmarkFillIcon } from '../../shared/icons/bookmark-fill.component';
+import { BookmarkIcon } from '../../shared/icons/bookmark.component';
 import { CircleUserIcon } from '../../shared/icons/circle-user.component';
-import { FavouriteIcon } from '../../shared/icons/favourite.component';
 import { SearchIcon } from '../../shared/icons/search.component';
 import { SortIcon } from '../../shared/icons/sort.component';
 
@@ -18,9 +19,11 @@ import { SortIcon } from '../../shared/icons/sort.component';
     CommonModule,
     ReactiveFormsModule,
     RouterLink,
+    ListLoadingComponent,
     SearchIcon,
     SortIcon,
-    FavouriteIcon,
+    BookmarkIcon,
+    BookmarkFillIcon,
     CircleUserIcon,
     NgbPagination,
   ],
@@ -28,14 +31,13 @@ import { SortIcon } from '../../shared/icons/sort.component';
   styleUrl: './posts.component.scss',
 })
 export class PostsPages implements OnInit {
-  private apiService = inject(ApiService);
   private storageService = inject(StorageService);
   private activeRoute = inject(ActivatedRoute);
   private router = inject(Router);
 
   readonly #destroyRef = inject(DestroyRef);
 
-  pageState: 'LOADING' | 'COMPLETE' | 'ERROR' = 'LOADING';
+  loading = true;
   _currPage = 1;
   pageSize = 10;
   totalPost = 0;
@@ -71,28 +73,15 @@ export class PostsPages implements OnInit {
   }
 
   loadPosts(query?: string, sort?: string) {
-    const setContent = (posts: IPost[]) => {
-      this.filteredPosts.set([...posts]);
+    this.filteredPosts.set([...this.storageService.posts]);
 
-      if (query) this.searchPosts(query);
-      if (sort) this.sortPosts(sort as 'ASC' | 'DESC' | 'DEFAULT');
+    if (query) this.searchPosts(query);
+    if (sort) this.sortPosts(sort as 'ASC' | 'DESC' | 'DEFAULT');
 
-      this.totalPost = this.filteredPosts().length;
-      this.pageState = 'COMPLETE';
+    this.totalPost = this.filteredPosts().length;
+    this.loading = false;
 
-      this.initListener();
-    };
-
-    if (this.storageService.posts.length === 0) {
-      this.apiService.getAllPosts().subscribe({
-        next: setContent,
-        error: () => (this.pageState = 'ERROR'),
-      });
-    } else setContent(this.storageService.posts);
-
-    if (this.storageService.users.length === 0) {
-      this.apiService.getAllUsers();
-    }
+    this.initListener();
   }
 
   initListener() {
@@ -102,8 +91,8 @@ export class PostsPages implements OnInit {
   }
 
   getPostInfo(id: number) {
-    const { name } = this.storageService.users[id - 1];
-    return { author: name, likes: Math.floor(Math.random() * 200) + 1 };
+    const { name } = this.storageService.users()[id - 1];
+    return { author: name, saved: false };
   }
 
   onSubmit(e: Event) {

@@ -4,12 +4,6 @@
   gap: 1rem;
 }
 
-select {
-  -moz-appearance: none !important;
-  -webkit-appearance: none !important;
-  appearance: none !important;
-}
-
 .form-select {
   background-image: none;
 }
@@ -31,8 +25,4 @@ select {
   line-clamp: 3;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.loading-card {
-  height: 13rem;
 }

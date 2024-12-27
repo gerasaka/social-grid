@@ -1,19 +1,9 @@
-<h1>See all post</h1>
-<p class="mb-4">Find the best posts here</p>
+@if (loading) {
+  <list-loading />
+} @else {
+  <h1>See all post</h1>
+  <p class="mb-4">Find the best posts here</p>
 
-@if (pageState === "LOADING") {
-  <div class="placeholder-glow d-flex justify-content-end mb-4">
-    <span class="placeholder col-5 rounded" style="height: 2.375rem"></span>
-    <span class="placeholder col-4 rounded" style="height: 2.375rem"></span>
-  </div>
-
-  <div class="post-container placeholder-glow">
-    <span class="placeholder rounded-3 loading-card"></span>
-    <span class="placeholder rounded-3 loading-card"></span>
-    <span class="placeholder rounded-3 loading-card"></span>
-    <span class="placeholder rounded-3 loading-card"></span>
-  </div>
-} @else if (pageState === "COMPLETE") {
   <form
     class="d-flex justify-content-between justify-content-md-start gap-3 mb-4 w-full"
     (submit)="onSubmit($event)"
@@ -42,27 +32,30 @@
   <div class="post-container">
     @for (post of posts(); track $index) {
       <div class="card h-100">
+        <div
+          class="card-header d-flex justify-content-between align-items-center"
+          style="font-size: 0.875rem"
+        >
+          @let postInfo = getPostInfo(post.userId);
+
+          <span class="d-flex gap-2 align-items-center">
+            <icon-circle-user size="16" />
+            <a [routerLink]="['/users/' + post.userId]" class="text-decoration-none">
+              {{ postInfo.author }}
+            </a>
+          </span>
+          <span class="d-flex gap-2 align-items-center">
+            @if (postInfo.saved) {
+              <icon-bookmark-fill />
+            } @else {
+              <icon-bookmark />
+            }
+          </span>
+        </div>
+
         <div class="card-body">
-          <div
-            class="d-flex justify-content-between align-items-center mb-3"
-            style="font-size: 0.875rem"
-          >
-            @let postInfo = getPostInfo(post.userId);
-
-            <span class="d-flex gap-2 align-items-center">
-              <icon-circle-user size="14" />
-              <a [routerLink]="['/routePath']" class="text-decoration-none">
-                {{ postInfo.author }}
-              </a>
-            </span>
-            <span class="d-flex gap-2 align-items-center">
-              <icon-favourite size="14" />
-              {{ postInfo.likes }}
-            </span>
-          </div>
-
           <a
-            [routerLink]="['/routePath']"
+            [routerLink]="['/posts/' + post.id]"
             class="d-flex align-items-center mb-3 text-decoration-none"
             style="height: 3rem"
           >
@@ -85,6 +78,4 @@
       />
     </div>
   }
-} @else {
-  <!-- TODO: add error illustration -->
 }
