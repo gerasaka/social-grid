@@ -1,0 +1,24 @@
+.text-max-lines {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &-1 {
+    @extend .text-max-lines;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+  }
+
+  &-2 {
+    @extend .text-max-lines;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+
+  &-3 {
+    @extend .text-max-lines;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+  }
+}
