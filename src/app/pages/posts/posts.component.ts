@@ -2,28 +2,23 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbPagination } from '@ng-bootstrap/ng-bootstrap';
 import { FilterComponent } from '../../components/filter/filter.component';
 import { TFilter, TSortQuery } from '../../components/filter/filter.types';
 import { ListLoadingComponent } from '../../components/list-loading.component';
+import { PostCardComponent } from '../../components/post-card/post-card.component';
 import { IPost } from '../../core/services/api/response.dto';
 import { StorageService } from '../../core/services/storage/storage.service';
-import { BookmarkFillIcon } from '../../shared/icons/bookmark-fill.component';
-import { BookmarkIcon } from '../../shared/icons/bookmark.component';
-import { CircleUserIcon } from '../../shared/icons/circle-user.component';
 
 @Component({
   selector: 'posts',
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    RouterLink,
     ListLoadingComponent,
     FilterComponent,
-    BookmarkIcon,
-    BookmarkFillIcon,
-    CircleUserIcon,
+    PostCardComponent,
     NgbPagination,
   ],
   templateUrl: './posts.component.html',
@@ -80,11 +75,6 @@ export class PostsPages implements OnInit {
 
     this.totalPost = this.filteredPosts().length;
     this.loading = false;
-  }
-
-  getPostInfo(id: number) {
-    const { name } = this.storageService.users()[id - 1];
-    return { author: name, saved: false };
   }
 
   applyFilters({ search, sort }: TFilter) {

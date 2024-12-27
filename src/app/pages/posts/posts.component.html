@@ -8,40 +8,7 @@
 
   <div class="post-container">
     @for (post of posts(); track $index) {
-      <div class="card h-100">
-        <div
-          class="card-header d-flex justify-content-between align-items-center"
-          style="font-size: 0.875rem"
-        >
-          @let postInfo = getPostInfo(post.userId);
-
-          <span class="d-flex gap-2 align-items-center">
-            <icon-circle-user size="16" />
-            <a [routerLink]="['/users/' + post.userId]" class="text-decoration-none">
-              {{ postInfo.author }}
-            </a>
-          </span>
-          <span class="d-flex gap-2 align-items-center">
-            @if (postInfo.saved) {
-              <icon-bookmark-fill />
-            } @else {
-              <icon-bookmark />
-            }
-          </span>
-        </div>
-
-        <div class="card-body">
-          <a
-            [routerLink]="['/posts/' + post.id]"
-            class="d-flex align-items-center mb-3 text-decoration-none"
-            style="height: 3rem"
-          >
-            <h5 class="post-title text-secondary">{{ post.title }}</h5>
-          </a>
-
-          <p class="post-body mb-0">{{ post.body }}</p>
-        </div>
-      </div>
+      <post-card [post]="post" [showAuthor]="true" />
     }
   </div>
 
