@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { switchMap } from 'rxjs';
 import { ApiService } from '../../core/services/api/api.service';
 import { IAlbum, IPhoto } from '../../core/services/api/response.dto';
@@ -18,8 +18,8 @@ export class PhotoDetailsPage implements OnInit {
   private apiService = inject(ApiService);
   private storageService = inject(StorageService);
   private activeRoute = inject(ActivatedRoute);
+  private router = inject(Router);
 
-  pageState: 'LOADING' | 'COMPLETE' | 'ERROR' = 'LOADING';
   photo!: IPhoto;
   album!: IAlbum;
 
@@ -37,9 +37,8 @@ export class PhotoDetailsPage implements OnInit {
       .subscribe({
         next: (res) => {
           this.album = res;
-          this.pageState = 'COMPLETE';
         },
-        error: () => (this.pageState = 'ERROR'),
+        error: () => this.router.navigate(['error']),
       });
   }
 

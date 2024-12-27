@@ -1,6 +1,6 @@
 <button class="back" (click)="back()"><icon-arrow-left /> Back</button>
 
-<div class="text-center mt-4">
+<div class="text-center">
   <img
     [src]="'https://picsum.photos/id/' + photo.id + '/200/300'"
     [alt]="photo.title"
@@ -8,11 +8,11 @@
     style="aspect-ratio: 1"
   />
 
-  <h3 class="mt-4 mb-5">{{ photo.title }}</h3>
+  <h3 class="mt-4 mb-5 text-secondary">{{ photo.title }}</h3>
 
   <hr />
   <div class="text-start">
-    <p class="text-secondary">Related album</p>
+    <p>Related album</p>
     <div class="d-flex gap-2 align-items-center">
       <icon-album size="20" />
       <a [routerLink]="['/albums/' + album.id]" class="text-decoration-none">{{ album.title }}</a>
