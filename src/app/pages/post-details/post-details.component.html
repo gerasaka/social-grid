@@ -1,6 +1,6 @@
 <button class="back" (click)="back()"><icon-arrow-left /> Back</button>
 
-@if (pageState === "LOADING") {
+@if (loading) {
   <div class="placeholder-glow">
     <span class="placeholder col-12 rounded-4" style="aspect-ratio: 2.5/1"></span>
     <span class="placeholder col-6 rounded my-4" style="height: 2.5rem"></span>
@@ -18,9 +18,9 @@
     <span class="placeholder col-11 rounded my-1" style="height: 1rem"></span>
     <span class="placeholder col-4 rounded my-1" style="height: 1rem"></span>
   </div>
-} @else if (pageState === "COMPLETE") {
+} @else {
   <img
-    [src]="'https://picsum.photos/id/' + postDetails.id + '/1000/400'"
+    [src]="'https://picsum.photos/id/' + (postDetails.id + 100) + '/1000/400'"
     alt=""
     role="presentation"
     class="w-100 rounded-4"

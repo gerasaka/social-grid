@@ -19,7 +19,7 @@ export class PostDetailsPage implements OnInit {
   private apiService = inject(ApiService);
   private storageService = inject(StorageService);
 
-  pageState: 'LOADING' | 'COMPLETE' | 'ERROR' = 'LOADING';
+  loading = true;
 
   private _postDetails!: IPost;
   private _postAuthor!: IUser;
@@ -27,17 +27,14 @@ export class PostDetailsPage implements OnInit {
   ngOnInit(): void {
     const { id } = this.activeRoute.snapshot.params;
 
-    if (!id) this.router.navigate([]);
-    else {
-      this.apiService.getPostDetails$(id).subscribe({
-        next: (res) => {
-          this._postDetails = res;
-          this._postAuthor = this.storageService.users()[this.postDetails.userId - 1];
-          this.pageState = 'COMPLETE';
-        },
-        error: () => this.pageState === 'ERROR',
-      });
-    }
+    this.apiService.getPostDetails$(id).subscribe({
+      next: (res) => {
+        this._postDetails = res;
+        this._postAuthor = this.storageService.users()[this.postDetails.userId - 1];
+        this.loading = false;
+      },
+      error: () => this.router.navigate(['error']),
+    });
   }
 
   get postDetails() {
