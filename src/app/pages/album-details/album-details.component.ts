@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbPagination } from '@ng-bootstrap/ng-bootstrap';
 import { FilterComponent } from '../../components/filter/filter.component';
 import { TFilter, TSortQuery } from '../../components/filter/filter.types';
 import { ListLoadingComponent } from '../../components/list-loading.component';
+import { PhotoCardComponent } from '../../components/photo-card/photo-card.component';
 import { IPhoto } from '../../core/services/api/response.dto';
 import { StorageService } from '../../core/services/storage/storage.service';
 import { ArrowLeftIcon } from '../../shared/icons/arrow-left.component';
@@ -16,9 +17,9 @@ import { ArrowLeftIcon } from '../../shared/icons/arrow-left.component';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    RouterLink,
     ListLoadingComponent,
     FilterComponent,
+    PhotoCardComponent,
     ArrowLeftIcon,
     NgbPagination,
   ],

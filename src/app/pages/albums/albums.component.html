@@ -39,7 +39,10 @@
             />
           </div>
 
-          <a [routerLink]="['/albums/' + album.id]" class="h6 text-decoration-none album-title">
+          <a
+            [routerLink]="['/albums/' + album.id]"
+            class="h6 text-decoration-none text-max-lines-1 mb-0"
+          >
             {{ album.title }}
           </a>
         </div>

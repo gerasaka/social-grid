@@ -1,7 +1,7 @@
-<h1>Dashboard</h1>
+<h1 class="mb-0">Dashboard</h1>
 
 <div class="row g-3 mt-3">
-  <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+  <div class="col-6 col-sm-4 col-md-3 col-lg-2 mt-0">
     <div class="card">
       <div class="card-body">
         <p class="mb-2">Posts</p>
@@ -13,7 +13,7 @@
     </div>
   </div>
 
-  <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+  <div class="col-6 col-sm-4 col-md-3 col-lg-2 mt-0">
     <div class="card">
       <div class="card-body">
         <p class="mb-2">Albums</p>
@@ -25,7 +25,7 @@
     </div>
   </div>
 
-  <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+  <div class="col-6 col-sm-4 col-md-3 col-lg-2 mt-0">
     <div class="card">
       <div class="card-body">
         <p class="mb-2">Photos</p>
@@ -64,7 +64,10 @@
             </span>
           </div>
           <div class="card-body text-secondary">
-            <a [routerLink]="['/photos/' + post.id]" class="h6 text-decoration-none content-title">
+            <a
+              [routerLink]="['/photos/' + post.id]"
+              class="h6 text-decoration-none mb-0 text-max-lines-2"
+            >
               {{ post.title }}
             </a>
           </div>
