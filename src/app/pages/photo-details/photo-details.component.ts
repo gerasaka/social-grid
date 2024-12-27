@@ -20,6 +20,7 @@ export class PhotoDetailsPage implements OnInit {
   private activeRoute = inject(ActivatedRoute);
   private router = inject(Router);
 
+  loading = true;
   photo!: IPhoto;
   album!: IAlbum;
 
@@ -37,6 +38,7 @@ export class PhotoDetailsPage implements OnInit {
       .subscribe({
         next: (res) => {
           this.album = res;
+          this.loading = false;
         },
         error: () => this.router.navigate(['error']),
       });
