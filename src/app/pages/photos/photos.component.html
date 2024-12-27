@@ -1,49 +1,59 @@
-<h1>See all photo</h1>
+@if (loading) {
+  <list-loading />
+} @else {
+  <h1>See all Photos</h1>
+  <p class="mb-4">The best photos around the world are here</p>
 
-<div class="d-flex gap-3 align-items-end mb-4">
-  <div>
-    <label for="search" class="form-label">Search</label>
-    <input
-      type="text"
-      class="form-control"
-      id="search"
-      placeholder="Enter photo title"
-      [formControl]="query"
-    />
-  </div>
+  <form
+    class="d-flex justify-content-between justify-content-md-start gap-3 mb-4 w-full"
+    (submit)="onSubmit($event)"
+  >
+    <div class="position-relative">
+      <input
+        type="text"
+        class="form-control"
+        id="search"
+        placeholder="Search by title"
+        [formControl]="searchQuery"
+      />
+      <icon-search class="position-absolute top-50 end-0 translate-middle-y me-3" />
+    </div>
 
-  <div>
-    <label for="sort" class="form-label">Sort</label>
-    <select class="form-select" aria-label="Sort by" id="sort" [formControl]="sort">
-      <option selected value="DEFAULT">Default</option>
-      <option value="ASC">Ascending</option>
-      <option value="DESC">Descending</option>
-    </select>
-  </div>
-</div>
+    <div class="position-relative">
+      <select class="form-select" aria-label="Sort by" id="sort" [formControl]="sortQuery">
+        <option selected value="DEFAULT">Default</option>
+        <option value="ASC">Ascending</option>
+        <option value="DESC">Descending</option>
+      </select>
+      <icon-sort class="position-absolute top-50 end-0 translate-middle-y me-3" />
+    </div>
+  </form>
 
-<div class="container-fluid">
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+  <div class="photo-container">
     @for (photo of photos(); track $index) {
-      <div class="col">
-        <div class="card h-100">
-          <div class="card-body">
-            <img [src]="photo.url" alt="" />
-            <h5>{{ photo.title }}</h5>
-          </div>
+      <div class="card h-100">
+        <div class="card-body text-secondary d-flex flex-column gap-3 align-items-center">
+          <img
+            [src]="'https://picsum.photos/id/' + photo.id + '/300/300'"
+            [alt]="photo.title"
+            loading="lazy"
+          />
+          <a [routerLink]="['/photos/' + photo.id]" class="h6 text-decoration-none photo-title">
+            {{ photo.title }}
+          </a>
         </div>
       </div>
     }
   </div>
-</div>
 
-@if (totalPhoto) {
-  <div class="d-flex justify-content-center mt-4">
-    <ngb-pagination
-      [(page)]="currPage"
-      [pageSize]="pageSize"
-      [collectionSize]="totalPhoto"
-      [maxSize]="4"
-    />
-  </div>
+  @if (totalPhoto) {
+    <div class="d-flex justify-content-center mt-5">
+      <ngb-pagination
+        [(page)]="currPage"
+        [pageSize]="pageSize"
+        [collectionSize]="totalPhoto"
+        [maxSize]="4"
+      />
+    </div>
+  }
 }
