@@ -1,0 +1,25 @@
+.back {
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  background-color: transparent;
+  margin-bottom: 1.5rem;
+}
+
+.photo-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.form-select {
+  background-image: none;
+}
+
+img {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 0.5rem;
+}
