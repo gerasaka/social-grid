@@ -2,9 +2,6 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: 'dashboard',
-  },
-  {
     path: 'posts',
     loadComponent: () => import('./pages/posts/posts.component').then((c) => c.PostsPages),
   },
@@ -43,5 +40,6 @@ export const routes: Routes = [
   {
     path: '',
     redirectTo: 'dashboard',
+    pathMatch: 'full',
   },
 ];
