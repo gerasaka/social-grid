@@ -41,8 +41,8 @@ export class PostsPages implements OnInit {
   pageSize = 12;
   totalPost = 0;
 
-  searchQuery = '';
-  sortQuery: TSortQuery = 'DEFAULT';
+  search = '';
+  sort: TSortQuery = 'DEFAULT';
 
   filteredPosts = signal<IPost[]>([]);
   posts = computed(() => {
@@ -54,8 +54,8 @@ export class PostsPages implements OnInit {
   ngOnInit() {
     this.activeRoute.queryParams.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe({
       next: ({ search, sort, page }) => {
-        this.searchQuery = search || '';
-        this.sortQuery = sort || 'DEFAULT';
+        this.search = search || '';
+        this.sort = sort || 'DEFAULT';
         this._currPage = page || 1;
 
         this.loadPosts(search, sort);
@@ -69,14 +69,14 @@ export class PostsPages implements OnInit {
 
   set currPage(page: number) {
     this._currPage = page;
-    this.applyFilters({ searchQuery: this.searchQuery, sortQuery: this.sortQuery });
+    this.applyFilters({ search: this.search, sort: this.sort });
   }
 
   loadPosts(query?: string, sort?: string) {
     this.filteredPosts.set([...this.storageService.posts]);
 
     if (query) this.searchPosts(query);
-    if (sort) this.sortPosts(sort as 'ASC' | 'DESC' | 'DEFAULT');
+    if (sort) this.sortPosts(sort as TSortQuery);
 
     this.totalPost = this.filteredPosts().length;
     this.loading = false;
@@ -87,11 +87,11 @@ export class PostsPages implements OnInit {
     return { author: name, saved: false };
   }
 
-  applyFilters({ searchQuery, sortQuery }: TFilter) {
+  applyFilters({ search, sort }: TFilter) {
     this.router.navigate(['posts'], {
       queryParams: {
-        search: searchQuery || undefined,
-        sort: sortQuery === 'DEFAULT' ? undefined : sortQuery,
+        search: search || undefined,
+        sort: sort === 'DEFAULT' ? undefined : sort,
         page: this.currPage,
       },
     });
@@ -101,7 +101,7 @@ export class PostsPages implements OnInit {
     this.filteredPosts.set(this.storageService.posts.filter((post) => post.title.includes(query)));
   }
 
-  sortPosts(sort: 'ASC' | 'DESC' | 'DEFAULT') {
+  sortPosts(sort: TSortQuery) {
     switch (sort) {
       case 'ASC':
         this.filteredPosts.update((posts) =>

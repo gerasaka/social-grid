@@ -1,3 +1,3 @@
-export type TFilter = { searchQuery: string | null; sortQuery: string | null };
+export type TFilter = { search: string | null; sort: string | null };
 
 export type TSortQuery = 'ASC' | 'DESC' | 'DEFAULT';

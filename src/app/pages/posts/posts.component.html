@@ -4,11 +4,7 @@
   <h1>See all post</h1>
   <p class="mb-4">Find the best posts here</p>
 
-  <filter
-    [searchQuery]="searchQuery"
-    [sortQuery]="sortQuery"
-    (applyFilters)="applyFilters($event)"
-  />
+  <filter [search]="search" [sort]="sort" (applyFilters)="applyFilters($event)" />
 
   <div class="post-container">
     @for (post of posts(); track $index) {

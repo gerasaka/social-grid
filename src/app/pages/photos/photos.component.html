@@ -4,30 +4,7 @@
   <h1>See all Photos</h1>
   <p class="mb-4">The best photos around the world are here</p>
 
-  <form
-    class="d-flex justify-content-between justify-content-md-start gap-3 mb-4 w-full"
-    (submit)="onSubmit($event)"
-  >
-    <div class="position-relative">
-      <input
-        type="text"
-        class="form-control"
-        id="search"
-        placeholder="Search by title"
-        [formControl]="searchQuery"
-      />
-      <icon-search class="position-absolute top-50 end-0 translate-middle-y me-3" />
-    </div>
-
-    <div class="position-relative">
-      <select class="form-select" aria-label="Sort by" id="sort" [formControl]="sortQuery">
-        <option selected value="DEFAULT">Default</option>
-        <option value="ASC">Ascending</option>
-        <option value="DESC">Descending</option>
-      </select>
-      <icon-sort class="position-absolute top-50 end-0 translate-middle-y me-3" />
-    </div>
-  </form>
+  <filter [search]="search" [sort]="sort" (applyFilters)="applyFilters($event)" />
 
   <div class="photo-container">
     @for (photo of photos(); track $index) {

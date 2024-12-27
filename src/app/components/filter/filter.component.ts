@@ -15,22 +15,22 @@ import { TFilter, TSortQuery } from './filter.types';
 export class FilterComponent implements OnInit {
   readonly #destroyRef = inject(DestroyRef);
 
-  searchQuery = input<string>();
-  sortQuery = input<TSortQuery>();
+  search = input<string>();
+  sort = input<TSortQuery>();
   applyFilters = output<TFilter>();
 
-  search = new FormControl<string>('');
-  sort = new FormControl<TSortQuery>('DEFAULT');
+  searchQuery = new FormControl<string>('');
+  sortQuery = new FormControl<TSortQuery>('DEFAULT');
 
   ngOnInit(): void {
-    this.search.setValue(this.searchQuery() ?? '');
-    this.sort.setValue(this.sortQuery() ?? 'DEFAULT');
+    this.searchQuery.setValue(this.search() ?? '');
+    this.sortQuery.setValue(this.sort() ?? 'DEFAULT');
 
     this.initListener();
   }
 
   initListener() {
-    this.sort.valueChanges.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe({
+    this.sortQuery.valueChanges.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe({
       next: () => this.onSubmit(),
     });
   }
@@ -39,8 +39,8 @@ export class FilterComponent implements OnInit {
     e?.preventDefault();
 
     this.applyFilters.emit({
-      searchQuery: this.search.value,
-      sortQuery: this.sort.value,
+      search: this.searchQuery.value,
+      sort: this.sortQuery.value,
     });
   }
 }
