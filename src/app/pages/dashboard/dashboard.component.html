@@ -1,0 +1,86 @@
+<h1>Dashboard</h1>
+
+<div class="row g-3 mt-3">
+  <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+    <div class="card">
+      <div class="card-body">
+        <p class="mb-2">Posts</p>
+        <div class="d-flex gap-1 align-items-center">
+          <icon-post size="28" class="text-primary" />
+          <p class="mb-0 fs-6 fw-bold">100</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+    <div class="card">
+      <div class="card-body">
+        <p class="mb-2">Albums</p>
+        <div class="d-flex gap-1 align-items-center">
+          <icon-album size="28" class="text-primary" />
+          <p class="mb-0 fs-6 fw-bold">10</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+    <div class="card">
+      <div class="card-body">
+        <p class="mb-2">Photos</p>
+        <div class="d-flex gap-1 align-items-center">
+          <icon-photo size="28" class="text-primary" />
+          <p class="mb-0 fs-6 fw-bold">5000</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mt-4 row">
+  <div class="col-12 col-md-8">
+    <h3>New Photos</h3>
+
+    <div class="photo-container">
+      @for (photo of newPhotos; track $index) {
+        <div class="card h-100">
+          <div class="card-body text-secondary d-flex flex-column gap-3 align-items-center">
+            <img
+              [src]="'https://picsum.photos/id/' + photo.id + '/300/300'"
+              [alt]="photo.title"
+              loading="lazy"
+            />
+            <a [routerLink]="['/photos/' + photo.id]" class="h6 text-decoration-none content-title">
+              {{ photo.title }}
+            </a>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="col-12 col-md-4 mt-4 mt-md-0">
+    <h3>Recent Post</h3>
+
+    <div class="d-flex flex-column gap-3">
+      @for (post of recentPosts; track $index) {
+        <div class="card">
+          <div class="card-header">
+            <span class="d-flex gap-2 align-items-center">
+              <icon-circle-user size="16" />
+              <a [routerLink]="['/users/' + post.userId]" class="text-decoration-none">
+                {{ getPostAuthor(post.userId) }}
+              </a>
+            </span>
+          </div>
+          <div class="card-body text-secondary">
+            <a [routerLink]="['/photos/' + post.id]" class="h6 text-decoration-none content-title">
+              {{ post.title }}
+            </a>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

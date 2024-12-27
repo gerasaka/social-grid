@@ -1,0 +1,25 @@
+.photo-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.form-select {
+  background-image: none;
+}
+
+img {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 0.5rem;
+}
+
+.content-title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0;
+}
