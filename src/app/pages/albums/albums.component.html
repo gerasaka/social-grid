@@ -1,0 +1,83 @@
+@if (loading) {
+  <list-loading />
+} @else {
+  <h1>See all Albums</h1>
+  <p class="mb-4">Where the memories saved</p>
+
+  <form
+    class="d-flex justify-content-between justify-content-md-start gap-3 mb-4 w-full"
+    (submit)="onSubmit($event)"
+  >
+    <div class="position-relative">
+      <input
+        type="text"
+        class="form-control"
+        id="search"
+        placeholder="Search by title"
+        [formControl]="searchQuery"
+      />
+      <icon-search class="position-absolute top-50 end-0 translate-middle-y me-3" />
+    </div>
+
+    <div class="position-relative">
+      <select class="form-select" aria-label="Sort by" id="sort" [formControl]="sortQuery">
+        <option selected value="DEFAULT">Default</option>
+        <option value="ASC">Ascending</option>
+        <option value="DESC">Descending</option>
+      </select>
+      <icon-sort class="position-absolute top-50 end-0 translate-middle-y me-3" />
+    </div>
+  </form>
+
+  <div class="album-container">
+    @for (album of albums(); track $index) {
+      <div class="card h-100 album-card">
+        <div
+          class="card-header d-flex justify-content-between align-items-center"
+          style="font-size: 0.875rem"
+        >
+          @let author = getPostAuthor(album.userId);
+
+          <span class="d-flex gap-2 align-items-center">
+            <icon-circle-user />
+            <a [routerLink]="['/users/' + album.userId]" class="text-decoration-none">
+              {{ author }}
+            </a>
+          </span>
+        </div>
+
+        <div class="card-body text-secondary d-flex flex-column gap-3 align-items-center">
+          <div class="album-preview">
+            <img
+              [src]="'https://picsum.photos/id/' + album.id + '/150/150'"
+              alt=""
+              role="presentation"
+              loading="lazy"
+            />
+            <img
+              [src]="'https://picsum.photos/id/' + (album.id + 10) + '/150/150'"
+              alt=""
+              role="presentation"
+              loading="lazy"
+            />
+          </div>
+
+          <a [routerLink]="['/albums/' + album.id]" class="h6 text-decoration-none album-title">
+            {{ album.title }}
+          </a>
+        </div>
+      </div>
+    }
+  </div>
+
+  @if (totalAlbum) {
+    <div class="d-flex justify-content-center mt-5">
+      <ngb-pagination
+        [(page)]="currPage"
+        [pageSize]="pageSize"
+        [collectionSize]="totalAlbum"
+        [maxSize]="4"
+      />
+    </div>
+  }
+}

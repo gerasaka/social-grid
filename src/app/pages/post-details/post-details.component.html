@@ -1,0 +1,52 @@
+<button class="back" (click)="back()"><icon-arrow-left /> Back</button>
+
+@if (loading) {
+  <div class="placeholder-glow">
+    <span class="placeholder col-12 rounded-4" style="aspect-ratio: 2.5/1"></span>
+    <span class="placeholder col-6 rounded my-4" style="height: 2.5rem"></span>
+
+    <hr />
+    <p class="mb-2">Posted by:</p>
+    <span class="d-flex gap-2 align-items-center">
+      <div class="placeholder rounded-circle" style="height: 2rem; width: 2rem"></div>
+      <span class="placeholder rounded col-3"></span>
+    </span>
+    <hr />
+
+    <span class="placeholder col-12 rounded my-1" style="height: 1rem"></span>
+    <span class="placeholder col-10 rounded my-1" style="height: 1rem"></span>
+    <span class="placeholder col-11 rounded my-1" style="height: 1rem"></span>
+    <span class="placeholder col-4 rounded my-1" style="height: 1rem"></span>
+  </div>
+} @else {
+  <img
+    [src]="'https://picsum.photos/id/' + (postDetails.id + 100) + '/1000/400'"
+    alt=""
+    role="presentation"
+    class="w-100 rounded-4"
+    style="aspect-ratio: 2.5/1"
+  />
+
+  <h1 class="my-4 text-secondary">{{ postDetails.title }}</h1>
+
+  <hr />
+  <p class="mb-2">Posted by:</p>
+  <div class="d-flex justify-content-between align-items-center">
+    <span class="d-flex gap-2 align-items-center">
+      <img
+        [src]="'https://i.pravatar.cc/150?img=' + postAuthor.id"
+        [alt]="postAuthor.name"
+        class="rounded-circle"
+        style="height: 2rem"
+      />
+      <a [routerLink]="['/users/' + postAuthor.id]" class="text-decoration-none">
+        {{ postAuthor.name }}
+      </a>
+    </span>
+
+    <icon-bookmark size="24" />
+  </div>
+  <hr />
+
+  <p>{{ postDetails.body }}</p>
+}

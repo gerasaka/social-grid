@@ -1,0 +1,18 @@
+{
+  "git.ignoreLimitWarning": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "prettier.configPath": ".prettierrc",
+  "[html]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "always"
+    }
+  },
+  "[typescript]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "always",
+      "source.fixAll": "always"
+    }
+  }
+}

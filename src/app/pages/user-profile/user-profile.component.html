@@ -1,0 +1,105 @@
+<button class="back" (click)="back()"><icon-arrow-left /> Back</button>
+
+@if (loading) {
+  <div class="placeholder-glow d-flex flex-column align-items-center">
+    <div class="placeholder rounded-circle" style="height: 6rem; width: 6rem"></div>
+    <span class="placeholder rounded col-5 mt-3" style="height: 2rem"></span>
+    <span class="placeholder rounded col-3 mt-1" style="height: 1.5rem"></span>
+  </div>
+
+  <hr />
+  <div class="d-flex flex-column flex-sm-row justify-content-between gap-3 placeholder-glow">
+    <div style="flex: 1">
+      <h5 class="fw-semibold">Contact</h5>
+
+      <div class="d-flex flex-column gap-1">
+        <span class="placeholder rounded col-4" style="height: 1.25rem"></span>
+        <span class="placeholder rounded col-6" style="height: 1.25rem"></span>
+        <span class="placeholder rounded col-3" style="height: 1.25rem"></span>
+      </div>
+    </div>
+
+    <div class="text-sm-end" style="flex: 1">
+      <h5 class="fw-semibold">Address</h5>
+
+      <div class="d-flex flex-column gap-1 align-items-sm-end">
+        <span class="placeholder rounded col-7" style="height: 1.25rem"></span>
+        <span class="placeholder rounded col-5" style="height: 1.25rem"></span>
+        <span class="placeholder rounded col-2" style="height: 1.25rem"></span>
+      </div>
+    </div>
+  </div>
+  <hr />
+
+  <h4 class="mb-3">Posts</h4>
+
+  <div class="placeholder-glow post-container">
+    <span class="placeholder rounded" style="height: 168px"></span>
+    <span class="placeholder rounded" style="height: 168px"></span>
+    <span class="placeholder rounded" style="height: 168px"></span>
+  </div>
+} @else {
+  <div class="my-4 d-flex flex-column align-items-center">
+    <div>
+      <img
+        [src]="'https://i.pravatar.cc/150?img=' + user.id"
+        [alt]="user.name"
+        class="rounded-circle"
+        style="height: 6rem"
+      />
+    </div>
+
+    <h3 class="fw-semibold mt-3 mb-0">{{ user.name }}</h3>
+    <p class="text-primary mb-0">&#64;{{ user.username }}</p>
+  </div>
+
+  <hr />
+  <div class="d-flex flex-column flex-sm-row justify-content-between gap-3">
+    <div>
+      <h5 class="fw-semibold">Contact</h5>
+
+      <div class="text-secondary contact">
+        <icon-mail />
+        <p class="mb-0">{{ user.email }}</p>
+
+        <icon-phone />
+        <p class="mb-0">{{ user.phone }}</p>
+
+        <icon-globe />
+        <p class="mb-0">{{ user.website }}</p>
+      </div>
+    </div>
+
+    <div class="text-sm-end">
+      <h5 class="fw-semibold">Address</h5>
+
+      <div class="text-secondary d-flex flex-sm-row-reverse gap-2">
+        <icon-pin style="margin-top: 0.25rem" />
+        <p class="mb-0">
+          {{ user.address.street }},<br />{{ user.address.city }},<br />{{ user.address.zipcode }}
+        </p>
+      </div>
+    </div>
+  </div>
+  <hr />
+
+  <h4 class="mb-3">Posts</h4>
+
+  <div class="post-container">
+    @for (post of posts; track $index) {
+      <div class="card">
+        <div class="card-body">
+          <a
+            [routerLink]="['/posts/' + post.id]"
+            class="d-flex align-items-center mb-3 text-decoration-none"
+            style="height: 3rem"
+          >
+            <h5 class="post-title text-secondary">{{ post.title }}</h5>
+          </a>
+
+          <p class="post-body mb-0">{{ post.body }}</p>
+        </div>
+      </div>
+    }
+  </div>
+}

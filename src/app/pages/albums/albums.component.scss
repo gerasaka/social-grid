@@ -1,0 +1,43 @@
+.album-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.form-select {
+  background-image: none;
+}
+
+.album-card {
+  &:hover {
+    img:first-child {
+      transform: translate(-10px, 0);
+    }
+
+    img:last-child {
+      transform: rotate(5deg) translate(10px, 0);
+    }
+  }
+
+  .album-preview {
+    display: grid;
+    grid-template-areas: "stack";
+
+    img {
+      height: 150px;
+      width: 150px;
+      grid-area: stack;
+      transition: 0.3s ease-in-out;
+    }
+  }
+
+  .album-title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0;
+  }
+}

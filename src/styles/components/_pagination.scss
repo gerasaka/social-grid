@@ -1,0 +1,18 @@
+.pagination {
+  border: none;
+  gap: 0.5rem;
+}
+
+.page-link {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  background-color: transparent;
+  border: 1px solid #cccccc;
+}
+
+.page-item:first-child,
+.page-item:last-child {
+  .page-link {
+    border-radius: 0.5rem;
+  }
+}
