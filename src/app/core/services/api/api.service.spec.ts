@@ -94,7 +94,7 @@ describe('ApiService', () => {
       expect(post).toEqual(MOCK_ALBUM);
     });
 
-    const req = http.expectOne(`https://jsonplaceholder.typicode.com/posts/${albumId}`);
+    const req = http.expectOne(`https://jsonplaceholder.typicode.com/albums/${albumId}`);
     req.flush(MOCK_ALBUM);
   });
 
