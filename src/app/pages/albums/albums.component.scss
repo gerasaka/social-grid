@@ -4,10 +4,6 @@
   gap: 1rem;
 }
 
-.form-select {
-  background-image: none;
-}
-
 .album-card {
   &:hover {
     img:first-child {
@@ -29,15 +25,5 @@
       grid-area: stack;
       transition: 0.3s ease-in-out;
     }
-  }
-
-  .album-title {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
-    line-clamp: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-bottom: 0;
   }
 }

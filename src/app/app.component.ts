@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
   private storageService = inject(StorageService);
   private router = inject(Router);
 
-  pageState: 'LOADING' | 'COMPLETE' = 'LOADING';
+  loading = true;
 
   ngOnInit(): void {
     forkJoin([
@@ -29,11 +29,12 @@ export class AppComponent implements OnInit {
         this.storageService.posts = posts;
         this.storageService.albums = albums;
         this.storageService.photos = photos;
-        this.pageState = 'COMPLETE';
+        this.loading = false;
       },
       error: () => this.router.navigate(['error']),
     });
 
     this.apiService.loadUsers();
+    this.storageService.retrieveBookmarkedPosts();
   }
 }

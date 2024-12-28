@@ -44,7 +44,15 @@
       </a>
     </span>
 
-    <icon-bookmark size="24" />
+    @if (bookmarked) {
+      <button class="btn" (click)="removeBookmark(postDetails.id)">
+        <icon-bookmark-fill size="24" />
+      </button>
+    } @else {
+      <button class="btn" (click)="bookmarkPost(postDetails)">
+        <icon-bookmark size="24" />
+      </button>
+    }
   </div>
   <hr />
 

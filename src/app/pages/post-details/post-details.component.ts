@@ -21,28 +21,30 @@ export class PostDetailsPage implements OnInit {
 
   loading = true;
 
-  private _postDetails!: IPost;
-  private _postAuthor!: IUser;
+  postDetails!: IPost;
+  postAuthor!: IUser;
+  bookmarked!: Boolean;
 
   ngOnInit(): void {
     const { id } = this.activeRoute.snapshot.params;
 
     this.apiService.getPostDetails$(id).subscribe({
       next: (res) => {
-        this._postDetails = res;
-        this._postAuthor = this.storageService.users()[this.postDetails.userId - 1];
+        this.postDetails = res;
+        this.postAuthor = this.storageService.users()[this.postDetails.userId - 1];
+        this.bookmarked = Boolean(this.storageService.bookmarkedPosts()[id]);
         this.loading = false;
       },
       error: () => this.router.navigate(['error']),
     });
   }
 
-  get postDetails() {
-    return this._postDetails;
+  bookmarkPost(post: IPost) {
+    this.storageService.addBookmark(post);
   }
 
-  get postAuthor() {
-    return this._postAuthor;
+  removeBookmark(id: number) {
+    this.storageService.removeBookmark(id);
   }
 
   back() {

@@ -1,5 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { PostCardComponent } from '../../components/post-card/post-card.component';
 import { ApiService } from '../../core/services/api/api.service';
 import { IPost, IUser } from '../../core/services/api/response.dto';
 import { StorageService } from '../../core/services/storage/storage.service';
@@ -11,7 +12,7 @@ import { PinIcon } from '../../shared/icons/pin.component';
 
 @Component({
   selector: 'user-profile',
-  imports: [RouterLink, ArrowLeftIcon, MailIcon, PhoneIcon, GlobeIcon, PinIcon],
+  imports: [PostCardComponent, ArrowLeftIcon, MailIcon, PhoneIcon, GlobeIcon, PinIcon],
   templateUrl: './user-profile.component.html',
   styleUrl: './user-profile.component.scss',
 })

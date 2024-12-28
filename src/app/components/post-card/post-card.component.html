@@ -1,0 +1,36 @@
+<div class="card h-100">
+  @if (showAuthor()) {
+    <div
+      class="card-header d-flex justify-content-between align-items-center"
+      style="font-size: 0.875rem"
+    >
+      @let postInfo = getPostInfo(post());
+
+      <span class="d-flex gap-2 align-items-center">
+        <icon-circle-user size="16" />
+        <a [routerLink]="['/users/' + post().userId]" class="text-decoration-none">
+          {{ postInfo.author }}
+        </a>
+      </span>
+      <span class="d-flex gap-2 align-items-center">
+        @if (postInfo.bookmarked) {
+          <button class="btn" (click)="removeBookmark(post().id)"><icon-bookmark-fill /></button>
+        } @else {
+          <button class="btn" (click)="bookmarkPost(post())"><icon-bookmark /></button>
+        }
+      </span>
+    </div>
+  }
+
+  <div class="card-body">
+    <a
+      [routerLink]="['/posts/' + post().id]"
+      class="d-flex align-items-center mb-3 text-decoration-none"
+      style="height: 3rem"
+    >
+      <h5 class="text-secondary post-title text-max-lines-2">{{ post().title }}</h5>
+    </a>
+
+    <p class="post-body mb-0 text-max-lines-3">{{ post().body }}</p>
+  </div>
+</div>

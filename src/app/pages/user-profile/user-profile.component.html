@@ -87,19 +87,7 @@
 
   <div class="post-container">
     @for (post of posts; track $index) {
-      <div class="card">
-        <div class="card-body">
-          <a
-            [routerLink]="['/posts/' + post.id]"
-            class="d-flex align-items-center mb-3 text-decoration-none"
-            style="height: 3rem"
-          >
-            <h5 class="post-title text-secondary">{{ post.title }}</h5>
-          </a>
-
-          <p class="post-body mb-0">{{ post.body }}</p>
-        </div>
-      </div>
+      <post-card [post]="post" />
     }
   </div>
 }
