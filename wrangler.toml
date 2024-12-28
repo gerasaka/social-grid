@@ -1,6 +1,4 @@
 name = "project-env"
 
-pages_build_output_dir = "/dist/social-grid/browser"
-
 [vars]
 NODE_VERSION = "20.18.0"
