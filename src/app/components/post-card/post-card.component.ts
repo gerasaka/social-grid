@@ -21,8 +21,18 @@ export class PostCardComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  getPostInfo(id: number) {
-    const { name } = this.storageService.users()[id - 1];
-    return { author: name, saved: false };
+  getPostInfo(post: IPost) {
+    const { name } = this.storageService.users()[post.userId - 1];
+    const saved = this.storageService.bookmarkedPosts()[post.id];
+
+    return { author: name, bookmarked: Boolean(saved) };
+  }
+
+  bookmarkPost(post: IPost) {
+    this.storageService.addBookmark(post);
+  }
+
+  removeBookmark(id: number) {
+    this.storageService.removeBookmark(id);
   }
 }

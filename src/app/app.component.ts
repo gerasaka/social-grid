@@ -29,11 +29,13 @@ export class AppComponent implements OnInit {
         this.storageService.posts = posts;
         this.storageService.albums = albums;
         this.storageService.photos = photos;
+
         this.pageState = 'COMPLETE';
       },
       error: () => this.router.navigate(['error']),
     });
 
     this.apiService.loadUsers();
+    this.storageService.retrieveBookmarkedPosts();
   }
 }

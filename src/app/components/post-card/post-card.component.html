@@ -4,7 +4,7 @@
       class="card-header d-flex justify-content-between align-items-center"
       style="font-size: 0.875rem"
     >
-      @let postInfo = getPostInfo(post().userId);
+      @let postInfo = getPostInfo(post());
 
       <span class="d-flex gap-2 align-items-center">
         <icon-circle-user size="16" />
@@ -13,10 +13,10 @@
         </a>
       </span>
       <span class="d-flex gap-2 align-items-center">
-        @if (postInfo.saved) {
-          <icon-bookmark-fill />
+        @if (postInfo.bookmarked) {
+          <button class="btn" (click)="removeBookmark(post().id)"><icon-bookmark-fill /></button>
         } @else {
-          <icon-bookmark />
+          <button class="btn" (click)="bookmarkPost(post())"><icon-bookmark /></button>
         }
       </span>
     </div>
