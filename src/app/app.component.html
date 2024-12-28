@@ -2,7 +2,7 @@
   <div class="container position-relative">
     <navbar />
     <div style="padding-top: 5rem">
-      @if (pageState === "LOADING") {
+      @if (loading) {
         <list-loading />
       } @else {
         <router-outlet />
