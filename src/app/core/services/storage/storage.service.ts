@@ -13,10 +13,6 @@ export class StorageService {
   private _bookmark_storage_id = 'bookmarked-post';
   bookmarkedPosts = signal<Record<string, IPost | undefined>>({});
 
-  get bookmarkLength() {
-    return Object.keys(this.bookmarkedPosts());
-  }
-
   retrieveBookmarkedPosts() {
     const rawBookmark = localStorage.getItem(this._bookmark_storage_id);
     const postsFromStorage = JSON.parse(rawBookmark || '{}');
