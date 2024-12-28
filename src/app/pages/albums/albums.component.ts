@@ -78,7 +78,7 @@ export class AlbumsPage implements OnInit {
     this.loading = false;
   }
 
-  getPostAuthor(id: number) {
+  getAlbumAuthor(id: number) {
     const { name } = this.storageService.users()[id - 1];
     return name;
   }
