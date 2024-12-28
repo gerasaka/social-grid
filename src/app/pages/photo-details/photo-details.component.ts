@@ -4,7 +4,6 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { switchMap } from 'rxjs';
 import { ApiService } from '../../core/services/api/api.service';
 import { IAlbum, IPhoto } from '../../core/services/api/response.dto';
-import { StorageService } from '../../core/services/storage/storage.service';
 import { AlbumIcon } from '../../shared/icons/album.component';
 import { ArrowLeftIcon } from '../../shared/icons/arrow-left.component';
 
@@ -16,7 +15,6 @@ import { ArrowLeftIcon } from '../../shared/icons/arrow-left.component';
 })
 export class PhotoDetailsPage implements OnInit {
   private apiService = inject(ApiService);
-  private storageService = inject(StorageService);
   private activeRoute = inject(ActivatedRoute);
   private router = inject(Router);
 
