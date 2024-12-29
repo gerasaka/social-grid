@@ -11,7 +11,7 @@ describe('AlbumDetailsComponent', () => {
   let fixture: ComponentFixture<AlbumDetailsPage>;
   let storageService: jasmine.SpyObj<StorageService>;
   let router: Router;
-  let activatedRoute: ActivatedRoute;
+  let activeRoute: ActivatedRoute;
 
   beforeEach(() => {
     storageService = jasmine.createSpyObj('StorageService', ['albums', 'users']);
@@ -24,7 +24,7 @@ describe('AlbumDetailsComponent', () => {
     fixture = TestBed.createComponent(AlbumDetailsPage);
     component = fixture.componentInstance;
     router = TestBed.inject(Router);
-    activatedRoute = TestBed.inject(ActivatedRoute);
+    activeRoute = TestBed.inject(ActivatedRoute);
 
     component.albumId = 1;
     component.setAlbumPhotos();
@@ -35,9 +35,9 @@ describe('AlbumDetailsComponent', () => {
   });
 
   it('should initialize and load photos on ngOnInit', () => {
-    activatedRoute.snapshot.params = { id: 1 };
+    activeRoute.snapshot.params = { id: 1 };
     const mockQueryParams = { search: 'accusamus', sort: 'ASC', page: 2 };
-    spyOn(activatedRoute.queryParams, 'pipe').and.returnValue(of(mockQueryParams));
+    spyOn(activeRoute.queryParams, 'pipe').and.returnValue(of(mockQueryParams));
 
     fixture.detectChanges();
 
@@ -45,6 +45,16 @@ describe('AlbumDetailsComponent', () => {
     expect(component.search).toEqual('accusamus');
     expect(component.sort).toEqual('ASC');
     expect(component.currPage).toEqual(2);
+  });
+
+  it('should handle default values for missing queryParams', () => {
+    activeRoute.queryParams = of({});
+
+    component.ngOnInit();
+
+    expect(component.search).toBe('');
+    expect(component.sort).toBe('DEFAULT');
+    expect(component._currPage).toBe(1);
   });
 
   it('should load photos and set filteredPhotos correctly', () => {
