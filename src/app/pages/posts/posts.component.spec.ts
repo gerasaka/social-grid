@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { MOCK_POST_LIST } from '../../core/sample-response/post';
 import { StorageService } from '../../core/services/storage/storage.service';
@@ -10,31 +10,30 @@ describe('PostsPage', () => {
   let fixture: ComponentFixture<PostsPages>;
   let storageService: jasmine.SpyObj<StorageService>;
   let router: Router;
-  let activatedRoute: ActivatedRoute;
+  let activeRoute: ActivatedRoute;
 
   beforeEach(() => {
     storageService = jasmine.createSpyObj('StorageService', ['posts']);
     storageService.posts = MOCK_POST_LIST;
 
     TestBed.configureTestingModule({
-      imports: [PostsPages],
       providers: [
+        provideRouter([]),
         { provide: StorageService, useValue: storageService },
         { provide: ActivatedRoute, useValue: { queryParams: of({}) } },
-        { provide: Router, useValue: { navigate: jasmine.createSpy() } },
       ],
     });
 
     fixture = TestBed.createComponent(PostsPages);
     component = fixture.componentInstance;
     router = TestBed.inject(Router);
-    activatedRoute = TestBed.inject(ActivatedRoute);
+    activeRoute = TestBed.inject(ActivatedRoute);
   });
 
   it('should subscribe to route queryParams and update filters', () => {
     spyOn(component, 'loadPosts');
 
-    activatedRoute.queryParams = of({
+    activeRoute.queryParams = of({
       search: 'Example',
       sort: 'DESC',
       page: 2,
@@ -48,6 +47,16 @@ describe('PostsPage', () => {
     expect(component.loadPosts).toHaveBeenCalledWith('Example', 'DESC');
   });
 
+  it('should handle default values for missing queryParams', () => {
+    activeRoute.queryParams = of({});
+
+    component.ngOnInit();
+
+    expect(component.search).toBe('');
+    expect(component.sort).toBe('DEFAULT');
+    expect(component._currPage).toBe(1);
+  });
+
   it('should load posts and set filteredPosts correctly', () => {
     component.loadPosts();
 
@@ -56,8 +65,21 @@ describe('PostsPage', () => {
     expect(component.loading).toBeFalse();
   });
 
+  it('should search and sort albums with the given searchquery and sortquery ', () => {
+    spyOn(component, 'searchPosts');
+    spyOn(component, 'sortPosts');
+
+    component.loadPosts('test', 'ASC');
+
+    expect(component.searchPosts).toHaveBeenCalledWith('test');
+    expect(component.sortPosts).toHaveBeenCalledWith('ASC');
+    expect(component.loading).toBeFalse();
+  });
+
   it('should apply filters and update queryParams', () => {
+    const routerSpy = spyOn(router, 'navigate');
     const applyFiltersSpy = spyOn(component, 'applyFilters').and.callThrough();
+
     component.search = 'Test';
     component.sort = 'ASC';
     component.currPage = 2;
@@ -65,12 +87,18 @@ describe('PostsPage', () => {
     component.applyFilters({ search: 'Test', sort: 'ASC' });
 
     expect(applyFiltersSpy).toHaveBeenCalledWith({ search: 'Test', sort: 'ASC' });
-    expect(router.navigate).toHaveBeenCalledWith(['posts'], {
-      queryParams: {
-        search: 'Test',
-        sort: 'ASC',
-        page: 2,
-      },
+    expect(routerSpy).toHaveBeenCalledWith(['posts'], {
+      queryParams: { search: 'Test', sort: 'ASC', page: 2 },
+    });
+  });
+
+  it('should reset filters if searchQuery and sortQuery is not given', () => {
+    const routerSpy = spyOn(router, 'navigate');
+
+    component.applyFilters({ search: null, sort: 'DEFAULT' });
+
+    expect(routerSpy).toHaveBeenCalledWith(['posts'], {
+      queryParams: { search: undefined, sort: undefined, page: 1 },
     });
   });
 
