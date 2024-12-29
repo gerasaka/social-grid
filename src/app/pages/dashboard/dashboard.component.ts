@@ -34,6 +34,11 @@ export class DashboardPage implements OnInit {
     this.newPhotos = this.storageService.photos.slice(0, 10);
   }
 
+  get statistics() {
+    const { posts, albums, photos } = this.storageService;
+    return { postsCount: posts.length, albumsCount: albums.length, photosCount: photos.length };
+  }
+
   getPostAuthor(id: number) {
     const { name } = this.storageService.users()[Number(id)];
     return name;
