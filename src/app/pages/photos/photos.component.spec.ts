@@ -11,7 +11,7 @@ describe('PhotosPage', () => {
   let fixture: ComponentFixture<PhotosPage>;
   let storageService: jasmine.SpyObj<StorageService>;
   let router: Router;
-  let activatedRoute: ActivatedRoute;
+  let activeRoute: ActivatedRoute;
 
   beforeEach(() => {
     storageService = jasmine.createSpyObj('StorageService', ['photos']);
@@ -24,17 +24,13 @@ describe('PhotosPage', () => {
     fixture = TestBed.createComponent(PhotosPage);
     component = fixture.componentInstance;
     router = TestBed.inject(Router);
-    activatedRoute = TestBed.inject(ActivatedRoute);
+    activeRoute = TestBed.inject(ActivatedRoute);
   });
 
   it('should subscribe to route queryParams and update filters', () => {
     spyOn(component, 'loadPhotos');
 
-    activatedRoute.queryParams = of({
-      search: 'Example',
-      sort: 'DESC',
-      page: 2,
-    });
+    activeRoute.queryParams = of({ search: 'Example', sort: 'DESC', page: 2 });
 
     component.ngOnInit();
 
@@ -42,6 +38,27 @@ describe('PhotosPage', () => {
     expect(component.sort).toBe('DESC');
     expect(component.currPage).toBe(2);
     expect(component.loadPhotos).toHaveBeenCalledWith('Example', 'DESC');
+  });
+
+  it('should handle default values for missing queryParams', () => {
+    activeRoute.queryParams = of({});
+
+    component.ngOnInit();
+
+    expect(component.search).toBe('');
+    expect(component.sort).toBe('DEFAULT');
+    expect(component._currPage).toBe(1);
+  });
+
+  it('should search and sort albums with the given searchquery and sortquery ', () => {
+    spyOn(component, 'searchPhotos');
+    spyOn(component, 'sortPhotos');
+
+    component.loadPhotos('test', 'ASC');
+
+    expect(component.searchPhotos).toHaveBeenCalledWith('test');
+    expect(component.sortPhotos).toHaveBeenCalledWith('ASC');
+    expect(component.loading).toBeFalse();
   });
 
   it('should load photos and set filteredPhotos correctly', () => {
@@ -64,11 +81,17 @@ describe('PhotosPage', () => {
 
     expect(applyFiltersSpy).toHaveBeenCalledWith({ search: 'non', sort: 'ASC' });
     expect(routerSpy).toHaveBeenCalledWith(['photos'], {
-      queryParams: {
-        search: 'non',
-        sort: 'ASC',
-        page: 2,
-      },
+      queryParams: { search: 'non', sort: 'ASC', page: 2 },
+    });
+  });
+
+  it('should reset filters if searchQuery and sortQuery is not given', () => {
+    const routerSpy = spyOn(router, 'navigate');
+
+    component.applyFilters({ search: null, sort: 'DEFAULT' });
+
+    expect(routerSpy).toHaveBeenCalledWith(['photos'], {
+      queryParams: { search: undefined, sort: undefined, page: 1 },
     });
   });
 
