@@ -12,13 +12,12 @@ describe('DashboardPage', () => {
   let fixture: ComponentFixture<DashboardPage>;
   let storageService: jasmine.SpyObj<StorageService>;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     storageService = jasmine.createSpyObj('StorageService', ['posts', 'photos', 'users']);
 
-    await TestBed.configureTestingModule({
-      imports: [DashboardPage],
+    TestBed.configureTestingModule({
       providers: [provideRouter([]), { provide: StorageService, useValue: storageService }],
-    }).compileComponents();
+    });
 
     fixture = TestBed.createComponent(DashboardPage);
     component = fixture.componentInstance;

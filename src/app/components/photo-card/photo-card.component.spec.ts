@@ -10,11 +10,10 @@ describe('PhotoCardComponent', () => {
   let componentRef: ComponentRef<PhotoCardComponent>;
   let fixture: ComponentFixture<PhotoCardComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [PhotoCardComponent],
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       providers: [provideRouter([])],
-    }).compileComponents();
+    });
 
     fixture = TestBed.createComponent(PhotoCardComponent);
     component = fixture.componentInstance;

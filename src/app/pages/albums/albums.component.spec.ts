@@ -94,8 +94,7 @@ describe('AlbumsPage', () => {
     });
   });
 
-  it('should reset filters if not given searchQuery and sortQuery', () => {
-    const applyFiltersSpy = spyOn(component, 'applyFilters').and.callThrough();
+  it('should reset filters if searchQuery and sortQuery is not given', () => {
     const routerSpy = spyOn(router, 'navigate');
 
     component.applyFilters({ search: null, sort: 'DEFAULT' });

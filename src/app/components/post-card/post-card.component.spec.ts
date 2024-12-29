@@ -36,9 +36,10 @@ describe('PostCardComponent', () => {
   });
 
   it('should retrieve post information', () => {
-    const info = component.getPostInfo(MOCK_POST);
-
-    expect(info).toEqual({ author: MOCK_USER_LIST[MOCK_POST.userId - 1].name, bookmarked: true });
+    expect(component.getPostInfo(MOCK_POST)).toEqual({
+      author: MOCK_USER_LIST[MOCK_POST.userId - 1].name,
+      bookmarked: true,
+    });
     expect(storageService.users).toHaveBeenCalled();
     expect(storageService.bookmarkedPosts).toHaveBeenCalled();
   });

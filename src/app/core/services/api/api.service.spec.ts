@@ -13,6 +13,8 @@ describe('ApiService', () => {
   let http: HttpTestingController;
   let storageService: jasmine.SpyObj<StorageService>;
 
+  const API_BASE_URL = 'https://jsonplaceholder.typicode.com';
+
   beforeEach(() => {
     const storageSpy = jasmine.createSpyObj('StorageService', ['posts', 'albums', 'photos'], {
       users: { set: jasmine.createSpy('set') },
@@ -20,10 +22,9 @@ describe('ApiService', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        ApiService,
-        { provide: StorageService, useValue: storageSpy },
         provideHttpClient(),
         provideHttpClientTesting(),
+        { provide: StorageService, useValue: storageSpy },
       ],
     });
 
@@ -42,7 +43,7 @@ describe('ApiService', () => {
       expect(storageService.posts).toEqual(MOCK_POST_LIST);
     });
 
-    const req = http.expectOne('https://jsonplaceholder.typicode.com/posts');
+    const req = http.expectOne(`${API_BASE_URL}/posts`);
     req.flush(MOCK_POST_LIST);
   });
 
@@ -53,14 +54,14 @@ describe('ApiService', () => {
       expect(post).toEqual(MOCK_POST);
     });
 
-    const req = http.expectOne(`https://jsonplaceholder.typicode.com/posts/${postId}`);
+    const req = http.expectOne(`${API_BASE_URL}/posts/${postId}`);
     req.flush(MOCK_POST);
   });
 
   it('should load users and update storage', () => {
     service.loadUsers();
 
-    const req = http.expectOne('https://jsonplaceholder.typicode.com/users');
+    const req = http.expectOne(`${API_BASE_URL}/users`);
     req.flush(MOCK_USER_LIST);
 
     expect(storageService.users.set).toHaveBeenCalledWith(MOCK_USER_LIST);
@@ -73,7 +74,7 @@ describe('ApiService', () => {
       expect(user).toEqual(MOCK_USER);
     });
 
-    const req = http.expectOne(`https://jsonplaceholder.typicode.com/users/${userId}`);
+    const req = http.expectOne(`${API_BASE_URL}/users/${userId}`);
     req.flush(MOCK_USER);
   });
 
@@ -83,7 +84,7 @@ describe('ApiService', () => {
       expect(storageService.albums).toEqual(MOCK_ALBUM_LIST);
     });
 
-    const req = http.expectOne('https://jsonplaceholder.typicode.com/albums');
+    const req = http.expectOne(`${API_BASE_URL}/albums`);
     req.flush(MOCK_ALBUM_LIST);
   });
 
@@ -94,7 +95,7 @@ describe('ApiService', () => {
       expect(post).toEqual(MOCK_ALBUM);
     });
 
-    const req = http.expectOne(`https://jsonplaceholder.typicode.com/albums/${albumId}`);
+    const req = http.expectOne(`${API_BASE_URL}/albums/${albumId}`);
     req.flush(MOCK_ALBUM);
   });
 
@@ -104,7 +105,7 @@ describe('ApiService', () => {
       expect(storageService.photos).toEqual(MOCK_PHOTO_LIST);
     });
 
-    const req = http.expectOne('https://jsonplaceholder.typicode.com/photos');
+    const req = http.expectOne(`${API_BASE_URL}/photos`);
     req.flush(MOCK_PHOTO_LIST);
   });
 
@@ -115,7 +116,7 @@ describe('ApiService', () => {
       expect(photo).toEqual(MOCK_PHOTO);
     });
 
-    const req = http.expectOne(`https://jsonplaceholder.typicode.com/photos/${photoId}`);
+    const req = http.expectOne(`${API_BASE_URL}/photos/${photoId}`);
     expect(req.request.method).toBe('GET');
     req.flush(MOCK_PHOTO);
   });

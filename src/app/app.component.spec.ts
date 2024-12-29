@@ -17,7 +17,7 @@ describe('AppComponent', () => {
   let storageService: jasmine.SpyObj<StorageService>;
   let router: Router;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     storageService = jasmine.createSpyObj('StorageService', ['retrieveBookmarkedPosts']);
     apiService = jasmine.createSpyObj('ApiService', [
       'getAllPosts$',
@@ -30,7 +30,7 @@ describe('AppComponent', () => {
     apiService.getAllAlbums$.and.returnValue(of(MOCK_ALBUM_LIST));
     apiService.getAllPhotos$.and.returnValue(of(MOCK_PHOTO_LIST));
 
-    await TestBed.configureTestingModule({
+    TestBed.configureTestingModule({
       imports: [AppComponent],
       providers: [
         provideHttpClient(),
@@ -39,7 +39,7 @@ describe('AppComponent', () => {
         { provide: ApiService, useValue: apiService },
         { provide: StorageService, useValue: storageService },
       ],
-    }).compileComponents();
+    });
 
     fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
