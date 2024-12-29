@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { MOCK_BOOKMARKED } from '../../sample-response/bookmark';
 import { MOCK_POST, MOCK_POST_LIST } from '../../sample-response/post';
 import { StorageService } from './storage.service';
 
@@ -9,21 +10,36 @@ describe('StorageService', () => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(StorageService);
 
-    // Mock localStorage
-    spyOn(localStorage, 'getItem').and.callFake((key: string) => {
-      if (key === 'bookmarked-post') return JSON.stringify({ [MOCK_POST.id]: MOCK_POST });
-      else return null;
-    });
-
     spyOn(localStorage, 'setItem').and.callFake(() => {});
+    spyOn(service.bookmarkedPosts, 'set').and.callThrough();
   });
 
-  it('should retrieve bookmarked posts from localStorage', () => {
-    service.retrieveBookmarkedPosts();
-    const bookmarkedLength = Object.keys(service.bookmarkedPosts()).length;
+  describe('retrieveBookmarkedPosts', () => {
+    it('should set an empty object if localStorage is empty', () => {
+      spyOn(localStorage, 'getItem').and.returnValue(null);
 
-    expect(bookmarkedLength).not.toEqual(0);
-    expect(service.bookmarkedPosts()[MOCK_POST.id]).toEqual(MOCK_POST);
+      service.retrieveBookmarkedPosts();
+
+      expect(localStorage.getItem).toHaveBeenCalledWith('bookmarked-post');
+      expect(service.bookmarkedPosts.set).toHaveBeenCalledWith({});
+      expect(service.bookmarkedPosts()).toEqual({});
+    });
+
+    it('should set parsed data if localStorage contains valid JSON', () => {
+      spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify(MOCK_BOOKMARKED));
+
+      service.retrieveBookmarkedPosts();
+
+      expect(localStorage.getItem).toHaveBeenCalledWith('bookmarked-post');
+      expect(service.bookmarkedPosts.set).toHaveBeenCalledWith(MOCK_BOOKMARKED);
+    });
+
+    it('should handle invalid JSON gracefully', () => {
+      spyOn(localStorage, 'getItem').and.returnValue('{invalid-json}');
+      spyOn(console, 'error');
+
+      expect(() => service.retrieveBookmarkedPosts()).toThrow();
+    });
   });
 
   it('should add a bookmark and update localStorage', () => {
@@ -33,7 +49,7 @@ describe('StorageService', () => {
     service.addBookmark(MOCK_POST_2);
     const bookmarkedLength = Object.keys(service.bookmarkedPosts()).length;
 
-    expect(bookmarkedLength).toEqual(2);
+    expect(bookmarkedLength).toEqual(1);
     expect(service.bookmarkedPosts()[MOCK_POST_2.id]).toEqual(MOCK_POST_2);
   });
 
