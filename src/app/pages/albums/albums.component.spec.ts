@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { MOCK_ALBUM_LIST } from '../../core/sample-response/album';
 import { MOCK_USER_LIST } from '../../core/sample-response/user';
@@ -12,35 +12,26 @@ describe('AlbumsPage', () => {
   let fixture: ComponentFixture<AlbumsPage>;
   let storageService: jasmine.SpyObj<StorageService>;
   let router: Router;
-  let activatedRoute: ActivatedRoute;
+  let activeRoute: ActivatedRoute;
 
   beforeEach(() => {
     storageService = jasmine.createSpyObj('StorageService', ['albums', 'users']);
     storageService.albums = MOCK_ALBUM_LIST;
 
     TestBed.configureTestingModule({
-      imports: [AlbumsPage],
-      providers: [
-        { provide: StorageService, useValue: storageService },
-        { provide: ActivatedRoute, useValue: { queryParams: of({}) } },
-        { provide: Router, useValue: { navigate: jasmine.createSpy() } },
-      ],
+      providers: [provideRouter([]), { provide: StorageService, useValue: storageService }],
     });
 
     fixture = TestBed.createComponent(AlbumsPage);
     component = fixture.componentInstance;
     router = TestBed.inject(Router);
-    activatedRoute = TestBed.inject(ActivatedRoute);
+    activeRoute = TestBed.inject(ActivatedRoute);
   });
 
   it('should subscribe to route queryParams and update filters', () => {
     spyOn(component, 'loadAlbums');
 
-    activatedRoute.queryParams = of({
-      search: 'Example',
-      sort: 'DESC',
-      page: 2,
-    });
+    activeRoute.queryParams = of({ search: 'Example', sort: 'DESC', page: 2 });
 
     component.ngOnInit();
 
@@ -50,11 +41,32 @@ describe('AlbumsPage', () => {
     expect(component.loadAlbums).toHaveBeenCalledWith('Example', 'DESC');
   });
 
+  it('should handle default values for missing queryParams', () => {
+    activeRoute.queryParams = of({});
+
+    component.ngOnInit();
+
+    expect(component.search).toBe('');
+    expect(component.sort).toBe('DEFAULT');
+    expect(component._currPage).toBe(1);
+  });
+
   it('should load albums and set filteredAlbums correctly', () => {
     component.loadAlbums();
 
     expect(component.filteredAlbums()).toEqual(MOCK_ALBUM_LIST);
     expect(component.totalAlbum).toBe(MOCK_ALBUM_LIST.length);
+    expect(component.loading).toBeFalse();
+  });
+
+  it('should search and sort albums with the given searchquery and sortquery ', () => {
+    spyOn(component, 'searchAlbums');
+    spyOn(component, 'sortAlbums');
+
+    component.loadAlbums('test', 'ASC');
+
+    expect(component.searchAlbums).toHaveBeenCalledWith('test');
+    expect(component.sortAlbums).toHaveBeenCalledWith('ASC');
     expect(component.loading).toBeFalse();
   });
 
@@ -69,19 +81,27 @@ describe('AlbumsPage', () => {
 
   it('should apply filters and update queryParams', () => {
     const applyFiltersSpy = spyOn(component, 'applyFilters').and.callThrough();
+    const routerSpy = spyOn(router, 'navigate');
+
     component.search = 'quam';
     component.sort = 'ASC';
     component.currPage = 2;
-
     component.applyFilters({ search: 'quam', sort: 'ASC' });
 
     expect(applyFiltersSpy).toHaveBeenCalledWith({ search: 'quam', sort: 'ASC' });
-    expect(router.navigate).toHaveBeenCalledWith(['albums'], {
-      queryParams: {
-        search: 'quam',
-        sort: 'ASC',
-        page: 2,
-      },
+    expect(routerSpy).toHaveBeenCalledWith(['albums'], {
+      queryParams: { search: 'quam', sort: 'ASC', page: 2 },
+    });
+  });
+
+  it('should reset filters if not given searchQuery and sortQuery', () => {
+    const applyFiltersSpy = spyOn(component, 'applyFilters').and.callThrough();
+    const routerSpy = spyOn(router, 'navigate');
+
+    component.applyFilters({ search: null, sort: 'DEFAULT' });
+
+    expect(routerSpy).toHaveBeenCalledWith(['albums'], {
+      queryParams: { search: undefined, sort: undefined, page: 1 },
     });
   });
 
