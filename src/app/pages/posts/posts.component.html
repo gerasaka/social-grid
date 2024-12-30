@@ -1,29 +1,12 @@
-@if (loading) {
-  <list-loading />
-} @else {
-  <h1>See all post</h1>
-  <p class="mb-4">Find the best posts here</p>
+<list-container [pageState]="pageState" [pageFilter]="pagefilter">
+  <ng-container title>
+    <h1>See all post</h1>
+    <p class="mb-4">Find the best posts here</p>
+  </ng-container>
 
-  <filter [search]="search" [sort]="sort" (applyFilters)="applyFilters($event)" />
-
-  <div class="post-container">
-    @for (post of posts(); track $index) {
+  <ng-container content>
+    @for (post of posts; track $index) {
       <post-card [post]="post" [showAuthor]="true" />
     }
-  </div>
-
-  @if (posts().length === 0) {
-    <h3 class="text-center mt-4">Nothing to show</h3>
-  }
-
-  @if (totalPost) {
-    <div class="d-flex justify-content-center mt-5">
-      <ngb-pagination
-        [(page)]="currPage"
-        [pageSize]="pageSize"
-        [collectionSize]="totalPost"
-        [maxSize]="3"
-      />
-    </div>
-  }
-}
+  </ng-container>
+</list-container>

@@ -1,0 +1,25 @@
+@if (pageState().loading) {
+  <list-loading />
+} @else {
+  <filter
+    [search]="pageFilter().search"
+    [sort]="pageFilter().sort"
+    (applyFilters)="applyFilters($event)"
+  />
+
+  <ng-content select="[title]" />
+  <div class="content-container">
+    <ng-content select="[content]" />
+  </div>
+
+  @if (pageState().totalContent) {
+    <div class="d-flex justify-content-center mt-5">
+      <ngb-pagination
+        [(page)]="currPage"
+        [pageSize]="pageState().pageSize"
+        [collectionSize]="pageState().totalContent"
+        [maxSize]="3"
+      />
+    </div>
+  }
+}
