@@ -22,7 +22,19 @@ describe('FilterComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should set initial form control values based on inputs', () => {
+  it('should set default values if search() and sort() return null or undefined', () => {
+    spyOn(component, 'search').and.returnValue(undefined);
+    spyOn(component, 'sort').and.returnValue(undefined);
+    spyOn(component, 'initListener');
+
+    component.ngOnInit();
+
+    expect(component.searchQuery.value).toBe('');
+    expect(component.sortQuery.value).toBe('DEFAULT');
+    expect(component.initListener).toHaveBeenCalled();
+  });
+
+  it('should initialize searchQuery and sortQuery based on search() and sort()', () => {
     expect(component.searchQuery.value).toBe('test');
     expect(component.sortQuery.value).toBe('ASC');
   });

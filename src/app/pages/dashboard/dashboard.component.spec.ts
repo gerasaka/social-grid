@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { provideRouter } from '@angular/router';
+import { MOCK_ALBUM_LIST } from '../../core/sample-response/album';
 import { MOCK_PHOTO_LIST } from '../../core/sample-response/photos';
 import { MOCK_POST_LIST } from '../../core/sample-response/post';
 import { MOCK_USER_LIST } from '../../core/sample-response/user';
@@ -12,21 +13,22 @@ describe('DashboardPage', () => {
   let fixture: ComponentFixture<DashboardPage>;
   let storageService: jasmine.SpyObj<StorageService>;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     storageService = jasmine.createSpyObj('StorageService', ['posts', 'photos', 'users']);
 
-    await TestBed.configureTestingModule({
-      imports: [DashboardPage],
+    TestBed.configureTestingModule({
       providers: [provideRouter([]), { provide: StorageService, useValue: storageService }],
-    }).compileComponents();
+    });
 
     fixture = TestBed.createComponent(DashboardPage);
     component = fixture.componentInstance;
+
+    storageService.posts = MOCK_POST_LIST;
+    storageService.albums = MOCK_ALBUM_LIST;
+    storageService.photos = MOCK_PHOTO_LIST;
   });
 
   it('should initialize recentPosts and newPhotos on ngOnInit', () => {
-    storageService.posts = MOCK_POST_LIST;
-    storageService.photos = MOCK_PHOTO_LIST;
     storageService.users.and.returnValue(MOCK_USER_LIST);
 
     fixture.detectChanges();

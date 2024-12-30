@@ -12,7 +12,7 @@ describe('PostDetailsPage', () => {
   let fixture: ComponentFixture<PostDetailsPage>;
   let apiService: jasmine.SpyObj<ApiService>;
   let storageService: jasmine.SpyObj<StorageService>;
-  let activatedRoute: ActivatedRoute;
+  let activeRoute: ActivatedRoute;
   let router: Router;
 
   beforeEach(() => {
@@ -34,21 +34,24 @@ describe('PostDetailsPage', () => {
 
     fixture = TestBed.createComponent(PostDetailsPage);
     component = fixture.componentInstance;
-    activatedRoute = TestBed.inject(ActivatedRoute);
+    activeRoute = TestBed.inject(ActivatedRoute);
     router = TestBed.inject(Router);
   });
 
   it('should fetch post details and update state', () => {
-    activatedRoute.snapshot.params = { id: 1 };
+    activeRoute.snapshot.params = { id: 1 };
 
     apiService.getPostDetails$.and.returnValue(of(MOCK_POST));
     storageService.users.and.returnValue([MOCK_USER]);
+    storageService.bookmarkedPosts.and.returnValue({ 1: MOCK_POST });
 
     fixture.detectChanges();
 
     expect(apiService.getPostDetails$).toHaveBeenCalledWith(1);
     expect(component.postDetails).toEqual(MOCK_POST);
     expect(component.postAuthor).toEqual(MOCK_USER);
+    expect(component.bookmarked).toBeTrue();
+    expect(component.loading).toBeFalse();
   });
 
   it('should navigate to error page on API failure', () => {

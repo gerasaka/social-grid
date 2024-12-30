@@ -14,7 +14,7 @@ describe('UserProfilePage', () => {
   let apiService: jasmine.SpyObj<ApiService>;
   let storageService: jasmine.SpyObj<StorageService>;
   let router: Router;
-  let activatedRoute: ActivatedRoute;
+  let activeRoute: ActivatedRoute;
 
   beforeEach(() => {
     apiService = jasmine.createSpyObj('ApiService', ['getUserDetails$']);
@@ -31,14 +31,14 @@ describe('UserProfilePage', () => {
     fixture = TestBed.createComponent(UserProfilePage);
     component = fixture.componentInstance;
     router = TestBed.inject(Router);
-    activatedRoute = TestBed.inject(ActivatedRoute);
+    activeRoute = TestBed.inject(ActivatedRoute);
 
     apiService.getUserDetails$.and.returnValue(of(MOCK_USER));
     storageService.posts = MOCK_POST_LIST;
   });
 
   it('should fetch user profile on ngOnInit', () => {
-    activatedRoute.snapshot.params = { id: 1 };
+    activeRoute.snapshot.params = { id: 1 };
 
     const expectedUserPosts = MOCK_POST_LIST.filter((post) => post.userId === 1);
 

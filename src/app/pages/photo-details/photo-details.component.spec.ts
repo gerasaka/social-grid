@@ -6,12 +6,12 @@ import { MOCK_PHOTO } from '../../core/sample-response/photos';
 import { ApiService } from '../../core/services/api/api.service';
 import { PhotoDetailsPage } from './photo-details.component';
 
-fdescribe('PhotoDetailsPage', () => {
+describe('PhotoDetailsPage', () => {
   let component: PhotoDetailsPage;
   let fixture: ComponentFixture<PhotoDetailsPage>;
   let apiService: jasmine.SpyObj<ApiService>;
   let router: Router;
-  let activatedRoute: ActivatedRoute;
+  let activeRoute: ActivatedRoute;
 
   beforeEach(() => {
     apiService = jasmine.createSpyObj('ApiService', ['getPhotoDetails$', 'getAlbumDetails$']);
@@ -23,14 +23,14 @@ fdescribe('PhotoDetailsPage', () => {
     fixture = TestBed.createComponent(PhotoDetailsPage);
     component = fixture.componentInstance;
     router = TestBed.inject(Router);
-    activatedRoute = TestBed.inject(ActivatedRoute);
+    activeRoute = TestBed.inject(ActivatedRoute);
 
     apiService.getPhotoDetails$.and.returnValue(of(MOCK_PHOTO));
     apiService.getAlbumDetails$.and.returnValue(of(MOCK_ALBUM));
   });
 
   it('should fetch photo and album details on ngOnInit', () => {
-    activatedRoute.snapshot.params = { id: 1 };
+    activeRoute.snapshot.params = { id: 1 };
 
     fixture.detectChanges();
 

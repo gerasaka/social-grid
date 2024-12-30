@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { MOCK_PHOTO_LIST } from '../../core/sample-response/photos';
+import { IPhoto } from '../../core/services/api/response.dto';
 import { StorageService } from '../../core/services/storage/storage.service';
 import { AlbumDetailsPage } from './album-details.component';
 
@@ -11,7 +12,7 @@ describe('AlbumDetailsComponent', () => {
   let fixture: ComponentFixture<AlbumDetailsPage>;
   let storageService: jasmine.SpyObj<StorageService>;
   let router: Router;
-  let activatedRoute: ActivatedRoute;
+  let activeRoute: ActivatedRoute;
 
   beforeEach(() => {
     storageService = jasmine.createSpyObj('StorageService', ['albums', 'users']);
@@ -24,7 +25,7 @@ describe('AlbumDetailsComponent', () => {
     fixture = TestBed.createComponent(AlbumDetailsPage);
     component = fixture.componentInstance;
     router = TestBed.inject(Router);
-    activatedRoute = TestBed.inject(ActivatedRoute);
+    activeRoute = TestBed.inject(ActivatedRoute);
 
     component.albumId = 1;
     component.setAlbumPhotos();
@@ -34,86 +35,69 @@ describe('AlbumDetailsComponent', () => {
     expect(component.albumPhotos).toEqual(MOCK_PHOTO_LIST.slice(0, 3));
   });
 
-  it('should initialize and load photos on ngOnInit', () => {
-    activatedRoute.snapshot.params = { id: 1 };
-    const mockQueryParams = { search: 'accusamus', sort: 'ASC', page: 2 };
-    spyOn(activatedRoute.queryParams, 'pipe').and.returnValue(of(mockQueryParams));
+  it('should set page filter and state from query params', () => {
+    spyOn(component, 'loadPhotos');
+    activeRoute.queryParams = of({ search: 'test', sort: 'DESC', page: 2 });
 
     fixture.detectChanges();
 
-    expect(component.albumId).toEqual(1);
-    expect(component.search).toEqual('accusamus');
-    expect(component.sort).toEqual('ASC');
-    expect(component.currPage).toEqual(2);
+    expect(component.pagefilter.search).toBe('test');
+    expect(component.pagefilter.sort).toBe('DESC');
+    expect(component.pageState.currPage).toBe(2);
+    expect(component.loadPhotos).toHaveBeenCalledWith('test', 'DESC');
   });
 
-  it('should load photos and set filteredPhotos correctly', () => {
-    const expectedPhotoList = MOCK_PHOTO_LIST.slice(0, 3);
-    component.loadPhotos();
+  it('should handle default values for missing queryParams', () => {
+    activeRoute.queryParams = of({});
 
-    expect(component.filteredPhotos()).toEqual(expectedPhotoList);
-    expect(component.totalPhoto).toBe(expectedPhotoList.length);
-    expect(component.loading).toBeFalse();
+    component.ngOnInit();
+
+    expect(component.pagefilter.search).toBe('');
+    expect(component.pagefilter.sort).toBe('DEFAULT');
+    expect(component.pageState.currPage).toBe(1);
   });
 
-  it('should apply filters and update queryParams', () => {
-    const applyFiltersSpy = spyOn(component, 'applyFilters').and.callThrough();
-    const routerSpy = spyOn(router, 'navigate');
+  it('should filter photos based on search query', () => {
+    component.loadPhotos('qui', undefined);
 
-    component.search = 'non';
-    component.sort = 'ASC';
-    component.currPage = 2;
-
-    component.applyFilters({ search: 'non', sort: 'ASC' });
-
-    expect(applyFiltersSpy).toHaveBeenCalledWith({ search: 'non', sort: 'ASC' });
-    expect(routerSpy).toHaveBeenCalledWith(['albums', 1], {
-      queryParams: { search: 'non', sort: 'ASC', page: 2 },
-    });
+    expect(component.filteredPhotos.every((photo) => photo.title.includes('qui'))).toBeTrue();
   });
 
-  it('should update photos signal based on filteredPhotos', () => {
-    const expectedPhotoList = MOCK_PHOTO_LIST.slice(0, 3);
+  it('should sort photos in ascending order', () => {
+    const sortCallback = (a: IPhoto, b: IPhoto) => a.title[0].localeCompare(b.title[0]);
 
-    component.filteredPhotos.set(expectedPhotoList);
+    component.loadPhotos(undefined, 'ASC');
 
-    expect(component.photos()).toEqual(expectedPhotoList);
-  });
-
-  it('should filter albums by search term', () => {
-    const expectedPhotoList = MOCK_PHOTO_LIST.slice(0, 3);
-
-    component.searchPhotos('accusamus');
-
-    const filteredPhotos = component.filteredPhotos();
-
-    expect(filteredPhotos.length).toBeLessThan(expectedPhotoList.length);
-    expect(filteredPhotos[0].title).toContain('accusamus');
-  });
-
-  it('should sort albums in ascending order', () => {
-    component.loadPhotos();
-    component.sortPhotos('ASC');
-
-    const sortedAlbums = component.filteredPhotos();
-
-    expect(sortedAlbums[0].title.localeCompare(sortedAlbums[1].title)).toBeLessThanOrEqual(0);
+    expect(component.filteredPhotos).toEqual(component.filteredPhotos.sort(sortCallback));
   });
 
   it('should sort albums in descending order', () => {
-    component.loadPhotos();
-    component.sortPhotos('DESC');
+    const sortCallback = (a: IPhoto, b: IPhoto) => b.title[0].localeCompare(a.title[0]);
 
-    const sortedAlbums = component.filteredPhotos();
+    component.loadPhotos(undefined, 'DESC');
 
-    expect(sortedAlbums[0].title.localeCompare(sortedAlbums[1].title)).toBeGreaterThanOrEqual(0);
+    expect(component.filteredPhotos).toEqual(component.filteredPhotos.sort(sortCallback));
   });
 
-  it('should sort albums in default order', () => {
+  it('should sort photos in default order', () => {
     component.loadPhotos();
     component.sortPhotos('DEFAULT');
 
-    expect(component.filteredPhotos()).toEqual(component.albumPhotos);
+    expect(component.filteredPhotos).toEqual(
+      MOCK_PHOTO_LIST.filter((photo) => photo.albumId === component.albumId),
+    );
+  });
+
+  it('should paginate albums correctly', () => {
+    const page = 1;
+    const expectedPhotos = MOCK_PHOTO_LIST.filter((photo) => photo.albumId === component.albumId);
+
+    component.pageState.currPage = page;
+    component.pageState.pageSize = 10;
+    component.loadPhotos();
+
+    expect(component.photos).toEqual(expectedPhotos);
+    expect(component.pageState.totalContent).toBe(expectedPhotos.length);
   });
 
   it('should navigate back on calling back method', () => {

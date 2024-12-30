@@ -1,37 +1,37 @@
 <h1 class="mb-0">Dashboard</h1>
 
-<div class="row g-3 mt-3">
-  <div class="col-6 col-sm-4 col-md-3 col-lg-2 mt-0">
+<div class="row g-3 mt-0">
+  <div class="col-6 col-sm-4 col-md-3 col-lg-2">
     <div class="card">
       <div class="card-body">
         <p class="mb-2">Posts</p>
         <div class="d-flex gap-1 align-items-center">
           <icon-post size="28" class="text-primary" />
-          <p class="mb-0 fs-6 fw-bold">100</p>
+          <p class="mb-0 fs-6 fw-bold">{{ statistics.postsCount }}</p>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="col-6 col-sm-4 col-md-3 col-lg-2 mt-0">
+  <div class="col-6 col-sm-4 col-md-3 col-lg-2">
     <div class="card">
       <div class="card-body">
         <p class="mb-2">Albums</p>
         <div class="d-flex gap-1 align-items-center">
           <icon-album size="28" class="text-primary" />
-          <p class="mb-0 fs-6 fw-bold">10</p>
+          <p class="mb-0 fs-6 fw-bold">{{ statistics.albumsCount }}</p>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="col-6 col-sm-4 col-md-3 col-lg-2 mt-0">
+  <div class="col-6 col-sm-4 col-md-3 col-lg-2">
     <div class="card">
       <div class="card-body">
         <p class="mb-2">Photos</p>
         <div class="d-flex gap-1 align-items-center">
           <icon-photo size="28" class="text-primary" />
-          <p class="mb-0 fs-6 fw-bold">5000</p>
+          <p class="mb-0 fs-6 fw-bold">{{ statistics.photosCount }}</p>
         </div>
       </div>
     </div>
@@ -65,7 +65,7 @@
           </div>
           <div class="card-body text-secondary">
             <a
-              [routerLink]="['/photos/' + post.id]"
+              [routerLink]="['/posts/' + post.id]"
               class="h6 text-decoration-none mb-0 text-max-lines-2"
             >
               {{ post.title }}
