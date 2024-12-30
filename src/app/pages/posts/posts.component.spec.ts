@@ -1,15 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, provideRouter, Router } from '@angular/router';
+import { ActivatedRoute, provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { MOCK_POST_LIST } from '../../core/sample-response/post';
+import { IPost } from '../../core/services/api/response.dto';
 import { StorageService } from '../../core/services/storage/storage.service';
 import { PostsPages } from './posts.component';
 
-describe('PostsPage', () => {
+describe('PostsPages', () => {
   let component: PostsPages;
   let fixture: ComponentFixture<PostsPages>;
   let storageService: jasmine.SpyObj<StorageService>;
-  let router: Router;
   let activeRoute: ActivatedRoute;
 
   beforeEach(() => {
@@ -17,131 +17,74 @@ describe('PostsPage', () => {
     storageService.posts = MOCK_POST_LIST;
 
     TestBed.configureTestingModule({
-      providers: [
-        provideRouter([]),
-        { provide: StorageService, useValue: storageService },
-        { provide: ActivatedRoute, useValue: { queryParams: of({}) } },
-      ],
+      providers: [provideRouter([]), { provide: StorageService, useValue: storageService }],
     });
 
     fixture = TestBed.createComponent(PostsPages);
     component = fixture.componentInstance;
-    router = TestBed.inject(Router);
     activeRoute = TestBed.inject(ActivatedRoute);
   });
 
-  // it('should subscribe to route queryParams and update filters', () => {
-  //   spyOn(component, 'loadPosts');
+  it('should set page filter and state from query params', () => {
+    activeRoute.queryParams = of({ search: 'test', sort: 'DESC', page: 2 });
 
-  //   activeRoute.queryParams = of({
-  //     search: 'Example',
-  //     sort: 'DESC',
-  //     page: 2,
-  //   });
+    fixture.detectChanges();
 
-  //   component.ngOnInit();
-
-  //   expect(component.search).toBe('Example');
-  //   expect(component.sort).toBe('DESC');
-  //   // expect(component.currPage).toBe(2);
-  //   expect(component.loadPosts).toHaveBeenCalledWith('Example', 'DESC');
-  // });
-
-  // it('should handle default values for missing queryParams', () => {
-  //   activeRoute.queryParams = of({});
-
-  //   component.ngOnInit();
-
-  //   expect(component.search).toBe('');
-  //   expect(component.sort).toBe('DEFAULT');
-  //   expect(component._currPage).toBe(1);
-  // });
-
-  // it('should load posts and set filteredPosts correctly', () => {
-  //   component.loadPosts();
-
-  //   expect(component.filteredPosts()).toEqual(MOCK_POST_LIST);
-  //   expect(component.totalPost).toBe(MOCK_POST_LIST.length);
-  //   expect(component.loading).toBeFalse();
-  // });
-
-  // it('should search and sort albums with the given searchquery and sortquery ', () => {
-  //   spyOn(component, 'searchPosts');
-  //   spyOn(component, 'sortPosts');
-
-  //   component.loadPosts('test', 'ASC');
-
-  //   expect(component.searchPosts).toHaveBeenCalledWith('test');
-  //   expect(component.sortPosts).toHaveBeenCalledWith('ASC');
-  //   expect(component.loading).toBeFalse();
-  // });
-
-  // it('should apply filters and update queryParams', () => {
-  //   const routerSpy = spyOn(router, 'navigate');
-  //   const applyFiltersSpy = spyOn(component, 'applyFilters').and.callThrough();
-
-  //   component.search = 'Test';
-  //   component.sort = 'ASC';
-  //   component.currPage = 2;
-
-  //   component.applyFilters({ search: 'Test', sort: 'ASC' });
-
-  //   expect(applyFiltersSpy).toHaveBeenCalledWith({ search: 'Test', sort: 'ASC' });
-  //   expect(routerSpy).toHaveBeenCalledWith(['posts'], {
-  //     queryParams: { search: 'Test', sort: 'ASC', page: 2 },
-  //   });
-  // });
-
-  it('should reset filters if searchQuery and sortQuery is not given', () => {
-    const routerSpy = spyOn(router, 'navigate');
-
-    // component.applyFilters({ search: null, sort: 'DEFAULT' });
-
-    expect(routerSpy).toHaveBeenCalledWith(['posts'], {
-      queryParams: { search: undefined, sort: undefined, page: 1 },
-    });
+    expect(component.pagefilter.search).toBe('test');
+    expect(component.pagefilter.sort).toBe('DESC');
+    expect(component.pageState.currPage).toBe(2);
   });
 
-  // it('should update posts signal based on filteredPosts', () => {
-  //   component.filteredPosts.set(MOCK_POST_LIST);
-  //   const derivedPosts = component.posts();
+  it('should handle default values for missing queryParams', () => {
+    activeRoute.queryParams = of({});
 
-  //   expect(derivedPosts).toEqual(MOCK_POST_LIST.slice(0, component.pageSize));
-  // });
+    component.ngOnInit();
 
-  // it('should filter posts by search term', () => {
-  //   component.searchPosts('ipsam');
+    expect(component.pagefilter.search).toBe('');
+    expect(component.pagefilter.sort).toBe('DEFAULT');
+    expect(component.pageState.currPage).toBe(1);
+  });
 
-  //   const filteredPosts = component.filteredPosts();
+  it('should filter posts based on search query', () => {
+    component.loadPosts('qui', undefined);
 
-  //   expect(filteredPosts.length).toBeLessThan(MOCK_POST_LIST.length);
-  //   expect(filteredPosts[0].title).toContain('ipsam');
-  // });
+    expect(component.filteredPosts.every((post) => post.title.includes('qui'))).toBeTrue();
+  });
 
-  // it('should sort posts in ascending order', () => {
-  //   component.loadPosts();
-  //   component.sortPosts('ASC');
+  it('should sort posts in ascending order', () => {
+    const sortCallback = (a: IPost, b: IPost) => a.title[0].localeCompare(b.title[0]);
 
-  //   const sortedPosts = component.filteredPosts();
+    component.loadPosts(undefined, 'ASC');
 
-  //   expect(sortedPosts[0].title.localeCompare(sortedPosts[1].title)).toBeLessThanOrEqual(0);
-  // });
+    expect(component.filteredPosts).toEqual(component.filteredPosts.sort(sortCallback));
+  });
 
-  // it('should sort posts in descending order', () => {
-  //   component.loadPosts();
-  //   component.sortPosts('DESC');
+  it('should sort posts in descending order', () => {
+    const sortCallback = (a: IPost, b: IPost) => b.title[0].localeCompare(a.title[0]);
 
-  //   const sortedPosts = component.filteredPosts();
+    component.loadPosts(undefined, 'DESC');
 
-  //   expect(sortedPosts[0].title.localeCompare(sortedPosts[1].title)).toBeGreaterThanOrEqual(0);
-  // });
+    expect(component.filteredPosts).toEqual(component.filteredPosts.sort(sortCallback));
+  });
 
-  // it('should sort posts in default order', () => {
-  //   component.loadPosts();
-  //   component.sortPosts('DEFAULT');
+  it('should sort albums in default order', () => {
+    component.loadPosts();
+    component.sortPosts('DEFAULT');
 
-  //   const sortedPosts = component.filteredPosts();
+    expect(component.filteredPosts).toEqual(MOCK_POST_LIST);
+  });
 
-  //   expect(sortedPosts).toEqual(MOCK_POST_LIST);
-  // });
+  it('should paginate posts correctly', () => {
+    const page = 2;
+    component.pageState.currPage = page;
+    component.pageState.pageSize = 3;
+
+    component.loadPosts();
+
+    const start = (page - 1) * component.pageState.pageSize;
+    const end = start + component.pageState.pageSize;
+
+    expect(component.posts).toEqual(MOCK_POST_LIST.slice(start, end));
+    expect(component.pageState.totalContent).toBe(MOCK_POST_LIST.length);
+  });
 });
