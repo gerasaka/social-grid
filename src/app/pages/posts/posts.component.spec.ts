@@ -26,6 +26,7 @@ describe('PostsPages', () => {
   });
 
   it('should set page filter and state from query params', () => {
+    spyOn(component, 'loadPosts');
     activeRoute.queryParams = of({ search: 'test', sort: 'DESC', page: 2 });
 
     fixture.detectChanges();
@@ -33,6 +34,7 @@ describe('PostsPages', () => {
     expect(component.pagefilter.search).toBe('test');
     expect(component.pagefilter.sort).toBe('DESC');
     expect(component.pageState.currPage).toBe(2);
+    expect(component.loadPosts).toHaveBeenCalledWith('test', 'DESC');
   });
 
   it('should handle default values for missing queryParams', () => {
