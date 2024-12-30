@@ -1,24 +1,9 @@
 <button class="back" (click)="back()"><icon-arrow-left /> Back</button>
 
-@if (loading) {
-  <list-loading />
-} @else {
-  <filter [search]="search" [sort]="sort" (applyFilters)="applyFilters($event)" />
-
-  <div class="photo-container">
-    @for (photo of photos(); track $index) {
+<list-container [pageState]="pageState" [pageFilter]="pagefilter">
+  <ng-container content>
+    @for (photo of photos; track $index) {
       <photo-card [photo]="photo" />
     }
-  </div>
-
-  @if (totalPhoto) {
-    <div class="d-flex justify-content-center mt-5">
-      <ngb-pagination
-        [(page)]="currPage"
-        [pageSize]="pageSize"
-        [collectionSize]="totalPhoto"
-        [maxSize]="3"
-      />
-    </div>
-  }
-}
+  </ng-container>
+</list-container>
