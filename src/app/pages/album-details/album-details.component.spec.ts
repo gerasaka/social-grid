@@ -7,7 +7,7 @@ import { IPhoto } from '../../core/services/api/response.dto';
 import { StorageService } from '../../core/services/storage/storage.service';
 import { AlbumDetailsPage } from './album-details.component';
 
-fdescribe('AlbumDetailsComponent', () => {
+describe('AlbumDetailsComponent', () => {
   let component: AlbumDetailsPage;
   let fixture: ComponentFixture<AlbumDetailsPage>;
   let storageService: jasmine.SpyObj<StorageService>;
