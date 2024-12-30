@@ -59,7 +59,7 @@ describe('ListContainerComponent', () => {
 
     component.applyFilters(filter);
 
-    expect(routerSpy).toHaveBeenCalledWith(['posts'], {
+    expect(routerSpy).toHaveBeenCalledWith(['/'], {
       queryParams: { search: 'test', sort: 'ASC', page: component.currPage },
     });
   });
@@ -70,7 +70,18 @@ describe('ListContainerComponent', () => {
 
     component.applyFilters(filter);
 
-    expect(routerSpy).toHaveBeenCalledWith(['posts'], {
+    expect(routerSpy).toHaveBeenCalledWith(['/'], {
+      queryParams: { search: undefined, sort: undefined, page: component.currPage },
+    });
+  });
+
+  it('should navigate to current route when applying filters', () => {
+    const routerSpy = spyOn(router, 'navigate');
+    const filter = { search: null, sort: 'DEFAULT' };
+
+    component.applyFilters(filter);
+
+    expect(routerSpy).toHaveBeenCalledWith(['/'], {
       queryParams: { search: undefined, sort: undefined, page: component.currPage },
     });
   });

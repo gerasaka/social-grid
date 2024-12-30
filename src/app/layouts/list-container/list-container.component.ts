@@ -35,7 +35,9 @@ export class ListContainerComponent implements OnInit {
   }
 
   applyFilters({ search, sort }: TFilter) {
-    this.router.navigate(['posts'], {
+    const currRoute = this.router.url.split('?')[0];
+
+    this.router.navigate([currRoute], {
       queryParams: {
         search: search || undefined,
         sort: sort === 'DEFAULT' ? undefined : sort,
