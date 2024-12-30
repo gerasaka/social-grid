@@ -1,13 +1,11 @@
-@if (loading) {
-  <list-loading />
-} @else {
-  <h1>See all Albums</h1>
-  <p class="mb-4">Where the memories saved</p>
+<list-container [pageState]="pageState" [pageFilter]="pagefilter">
+  <ng-container title>
+    <h1>See all Albums</h1>
+    <p class="mb-4">Where the memories saved</p>
+  </ng-container>
 
-  <filter [search]="search" [sort]="sort" (applyFilters)="applyFilters($event)" />
-
-  <div class="album-container">
-    @for (album of albums(); track $index) {
+  <ng-container content>
+    @for (album of albums; track $index) {
       <div class="card h-100 album-card">
         <div
           class="card-header d-flex justify-content-between align-items-center"
@@ -41,23 +39,12 @@
 
           <a
             [routerLink]="['/albums/' + album.id]"
-            class="h6 text-decoration-none text-max-lines-1 mb-0"
+            class="h6 text-decoration-none text-max-lines-1 mb-0 text-center"
           >
             {{ album.title }}
           </a>
         </div>
       </div>
     }
-  </div>
-
-  @if (totalAlbum) {
-    <div class="d-flex justify-content-center mt-5">
-      <ngb-pagination
-        [(page)]="currPage"
-        [pageSize]="pageSize"
-        [collectionSize]="totalAlbum"
-        [maxSize]="3"
-      />
-    </div>
-  }
-}
+  </ng-container>
+</list-container>
