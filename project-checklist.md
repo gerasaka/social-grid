@@ -9,7 +9,7 @@
 
 ### Unit test coverage
 
-<img src="./public/preview/coverage.png" width="400px">
+<img src="./preview/coverage.png" width="400px">
 
 ## API Endpoints
 

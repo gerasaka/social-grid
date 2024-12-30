@@ -1,6 +1,7 @@
 # Social Grid
 
-This is sample project for Angular v19.
+This is sample project for Angular v19,
+see [Project Checklist](./project-checklist.md)
 
 ## Preview
 
