@@ -1,25 +1,12 @@
-@if (loading) {
-  <list-loading />
-} @else {
-  <h1>See all Photos</h1>
-  <p class="mb-4">The best photos around the world are here</p>
+<list-container [pageState]="pageState" [pageFilter]="pagefilter">
+  <ng-container title>
+    <h1>See all Photos</h1>
+    <p class="mb-4">The best photos around the world are here</p>
+  </ng-container>
 
-  <filter [search]="search" [sort]="sort" (applyFilters)="applyFilters($event)" />
-
-  <div class="photo-container">
-    @for (photo of photos(); track $index) {
+  <ng-container content>
+    @for (photo of photos; track $index) {
       <photo-card [photo]="photo" />
     }
-  </div>
-
-  @if (totalPhoto) {
-    <div class="d-flex justify-content-center mt-5">
-      <ngb-pagination
-        [(page)]="currPage"
-        [pageSize]="pageSize"
-        [collectionSize]="totalPhoto"
-        [maxSize]="3"
-      />
-    </div>
-  }
-}
+  </ng-container>
+</list-container>
