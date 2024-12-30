@@ -7,6 +7,10 @@
 - [x] Use unit test and have a good amount of code coverage
 - [x] Be able to extend and new features
 
+### Unit test coverage
+
+<img src="./public/preview/coverage.png" width="400px">
+
 ## API Endpoints
 
 - https://jsonplaceholder.typicode.com/posts/ to get the list of posts
@@ -83,5 +87,7 @@
 ## Extra Feature
 
 - [x] Add link to post author
-- [x] Bookmark post
 - [x] Show related album in photo details
+- [x] Bookmark post
+- [] Bookmark page
+- [] 404 page
